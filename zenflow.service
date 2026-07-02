@@ -1,0 +1,68 @@
+# ─────────────────────────────────────────────────────────────────
+#  ZenFlow API — systemd service
+#  File: /etc/systemd/system/zenflow.service
+#
+#  Install:
+#    sudo cp zenflow.service /etc/systemd/system/
+#    sudo systemctl daemon-reload
+#    sudo systemctl enable zenflow
+#    sudo systemctl start zenflow
+#    sudo systemctl status zenflow
+#
+#  Logs:
+#    sudo journalctl -u zenflow -f
+# ─────────────────────────────────────────────────────────────────
+[Unit]
+Description=ZenFlow API (FastAPI + Uvicorn)
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+
+# Run as a dedicated non-root user (create with: sudo useradd -r -s /bin/false zenflow)
+User=zenflow
+Group=zenflow
+
+WorkingDirectory=/opt/zenflow
+
+# Load .env file
+EnvironmentFile=/opt/zenflow/.env
+
+# 4 worker processes; adjust to (2 × CPU cores) + 1
+ExecStart=/opt/zenflow/venv/bin/gunicorn main:app \
+    --workers 4 \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --bind 127.0.0.1:8000 \
+    --timeout 30 \
+    --keepalive 5 \
+    --access-logfile /var/log/zenflow/access.log \
+    --error-logfile  /var/log/zenflow/error.log \
+    --log-level warning \
+    --capture-output \
+    --forwarded-allow-ips "*"
+
+ExecReload=/bin/kill -s HUP $MAINPID
+
+# Restart policy
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# Security hardening (systemd sandboxing)
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/zenflow /var/log/zenflow
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=512
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

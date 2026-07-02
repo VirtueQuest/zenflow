@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>ZenFlow</title>
+
+<!-- ── iOS PWA / Home Screen App ───────────────────────────── -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ZenFlow">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1E1B4B">
+<meta name="description" content="Wellness talent on demand — book certified therapists in minutes.">
+
+<!-- ── App Icon placeholders (replace with real 180×180 PNG) ── -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231E1B4B'/><text y='120' x='50%' text-anchor='middle' font-size='90'>🌿</text></svg>">
+
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── UI-UX Pro Max · Freelancer Platform × Wellness Calm ── */
+  /* Primary: Indigo · Accent: Emerald · Typography: Lora + Raleway */
+  --sage:#6366F1;         /* primary indigo */
+  --sage-light:#818CF8;   /* primary light */
+  --sage-dark:#4338CA;    /* primary dark */
+  --warm-stone:#E0E7FF;   /* lavender border/divider */
+  --parchment:#F5F3FF;    /* soft lavender background */
+  --deep-clay:#1E1B4B;    /* deep indigo-dark (header, CTAs) */
+  --terracotta:#C4714A;   /* danger/cancel */
+  --gold:#059669;         /* emerald accent (was gold — now CTA green) */
+  --gold-light:#34D399;   /* emerald light */
+  --white:#FFFFFF;
+  --muted:#6B7280;
+  /* Flat Design — minimal shadow */
+  --shadow:0 1px 4px rgba(30,27,75,.07);
+  --shadow-lg:0 4px 20px rgba(30,27,75,.12);
+  --radius:12px;
+  --radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Raleway',sans-serif;background:var(--parchment);color:var(--deep-clay);min-height:100vh;overflow-x:hidden;}
+h1,h2,h3{font-family:'Lora',serif;}
+
+/* HEADER */
+.header{background:var(--deep-clay);position:sticky;top:0;z-index:100;padding:0 20px;}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px;}
+.logo{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0;}
+.logo-sub{font-size:10px;font-weight:300;color:var(--sage-light);letter-spacing:2px;margin-top:1px;display:block;}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.lang-toggle{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--white);padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.lang-toggle:hover{background:rgba(255,255,255,.2);}
+.btn-primary{background:var(--sage);color:var(--white);border:none;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-primary:hover{background:var(--sage-dark);}
+.btn-secondary{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-secondary:hover{border-color:rgba(255,255,255,.6);}
+.token-badge{background:var(--gold);color:var(--deep-clay);padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+
+/* USER AVATAR in header */
+.user-avatar-btn{width:34px;height:34px;border-radius:50%;background:var(--sage);color:var(--white);border:2px solid rgba(255,255,255,.3);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.user-avatar-btn:hover{border-color:var(--sage-light);}
+
+/* AD BANNER */
+.ad-carousel{background:var(--deep-clay);overflow:hidden;}
+.ad-track{display:flex;animation:scroll-ads 35s linear infinite;width:max-content;}
+.ad-track:hover{animation-play-state:paused;}
+.ad-item{display:flex;align-items:center;gap:10px;padding:9px 28px;white-space:nowrap;border-right:1px solid rgba(255,255,255,.08);}
+.ad-badge{background:var(--gold);color:var(--deep-clay);font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:1px;}
+.ad-text{font-size:12px;color:var(--warm-stone);}
+.ad-cta{font-size:11px;color:var(--sage-light);font-weight:600;cursor:pointer;}
+@keyframes scroll-ads{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* HERO */
+.hero{background:var(--deep-clay);padding:56px 24px 72px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,.18),transparent 70%);border-radius:50%;}
+.hero::after{content:'';position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(129,140,248,.12),transparent 70%);border-radius:50%;}
+.hero-inner{max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:1;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.35);color:var(--sage-light);font-size:11px;letter-spacing:2px;font-weight:600;padding:6px 16px;border-radius:20px;margin-bottom:20px;}
+.hero h1{font-size:clamp(28px,5.5vw,52px);color:var(--white);line-height:1.15;margin-bottom:14px;}
+.hero h1 span{color:var(--sage-light);}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.6);margin-bottom:36px;line-height:1.6;}
+.search-container{position:relative;max-width:660px;margin:0 auto;}
+.search-bar{width:100%;background:var(--white);border:2px solid transparent;border-radius:50px;padding:16px 130px 16px 52px;font-size:14px;font-family:'Raleway',sans-serif;color:var(--deep-clay);outline:none;box-shadow:0 8px 40px rgba(0,0,0,.3);transition:border-color .2s;}
+.search-bar:focus{border-color:var(--sage);}
+.search-bar::placeholder{color:var(--muted);}
+.search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none;}
+.search-btn{position:absolute;right:7px;top:50%;transform:translateY(-50%);background:var(--sage-dark);color:var(--white);border:none;padding:9px 20px;border-radius:40px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+.search-btn:hover{background:var(--sage);}
+.search-suggestions{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--white);border-radius:14px;box-shadow:var(--shadow-lg);overflow:hidden;display:none;z-index:50;}
+.search-suggestions.show{display:block;}
+.suggestion-item{padding:11px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--deep-clay);transition:background .1s;}
+.suggestion-item:hover{background:var(--parchment);}
+.suggestion-item .stag{font-size:10px;color:var(--sage);background:rgba(99,102,241,.08);padding:2px 7px;border-radius:8px;}
+.hero-stats{display:flex;justify-content:center;gap:36px;margin-top:36px;flex-wrap:wrap;}
+.stat-num{font-family:'Lora',serif;font-size:26px;color:var(--white);font-weight:700;}
+.stat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:1px;}
+
+/* FILTER BAR */
+.filter-bar{background:var(--white);padding:14px 20px;border-bottom:1px solid var(--warm-stone);position:sticky;top:64px;z-index:90;}
+.filter-inner{max-width:1200px;margin:0 auto;display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none;}
+.filter-inner::-webkit-scrollbar{display:none;}
+.filter-chip{background:var(--parchment);border:1.5px solid var(--warm-stone);color:var(--deep-clay);padding:7px 16px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.filter-chip.active,.filter-chip:hover{background:var(--deep-clay);color:var(--white);border-color:var(--deep-clay);}
+.filter-divider{width:1px;height:22px;background:var(--warm-stone);flex-shrink:0;}
+.sort-select{background:var(--parchment);border:1.5px solid var(--warm-stone);color:var(--deep-clay);padding:7px 12px;border-radius:20px;font-size:12px;cursor:pointer;outline:none;font-family:'Raleway',sans-serif;margin-left:auto;flex-shrink:0;}
+
+/* MAIN */
+.main{max-width:1200px;margin:0 auto;padding:28px 20px 80px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.section-title{font-family:'Lora',serif;font-size:24px;}
+.results-count{font-size:12px;color:var(--muted);}
+
+/* TALENT CARDS */
+.talent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;}
+.talent-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:all .3s;cursor:pointer;border:1.5px solid transparent;}
+.talent-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--sage-light);}
+.card-media{position:relative;height:210px;overflow:hidden;}
+.card-photo{width:100%;height:100%;object-fit:cover;background:linear-gradient(135deg,var(--sage-light),var(--sage-dark));display:flex;align-items:center;justify-content:center;font-size:60px;}
+.card-video-badge{position:absolute;bottom:10px;right:10px;background:rgba(45,37,32,.8);color:var(--white);padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:4px;}
+.card-avail{position:absolute;top:10px;left:10px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px;}
+.avail-yes{background:rgba(67,56,202,.88);color:#fff;}
+.avail-no{background:rgba(180,80,60,.85);color:#fff;}
+.card-featured{position:absolute;top:10px;right:10px;background:var(--gold);color:var(--deep-clay);padding:2px 8px;border-radius:8px;font-size:9px;font-weight:800;letter-spacing:1px;}
+.card-body{padding:16px;}
+.card-name{font-family:'Lora',serif;font-size:18px;font-weight:600;margin-bottom:3px;}
+.card-title-txt{font-size:12px;color:var(--muted);margin-bottom:9px;}
+.card-skills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.skill-pill{background:rgba(99,102,241,.1);color:var(--sage-dark);border:1px solid rgba(99,102,241,.25);padding:2px 9px;border-radius:10px;font-size:10px;font-weight:500;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;}
+.card-rating{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:600;}
+.card-location{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px;}
+.card-rate{font-size:14px;font-weight:700;color:var(--sage-dark);}
+.card-footer{padding:10px 16px;border-top:1px solid var(--warm-stone);display:flex;gap:7px;}
+.btn-book{flex:1;background:var(--deep-clay);color:var(--white);border:none;padding:9px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-book:hover{background:var(--sage-dark);}
+.btn-view{background:var(--parchment);color:var(--deep-clay);border:1.5px solid var(--warm-stone);padding:9px 12px;border-radius:9px;font-size:12px;cursor:pointer;transition:all .2s;}
+.btn-view:hover{border-color:var(--sage);}
+
+/* OVERLAY / MODAL */
+.overlay{position:fixed;inset:0;background:rgba(30,27,75,.6);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;backdrop-filter:blur(4px);}
+.overlay.show{display:flex;}
+.modal{background:var(--white);border-radius:22px;width:100%;max-width:640px;margin:auto;box-shadow:var(--shadow-lg);overflow:hidden;animation:slideUp .28s ease;}
+@keyframes slideUp{from{transform:translateY(24px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-header{padding:22px 26px 18px;border-bottom:1px solid var(--warm-stone);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Lora',serif;font-size:20px;}
+.close-btn{width:34px;height:34px;border-radius:50%;background:var(--parchment);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.close-btn:hover{background:var(--warm-stone);}
+.modal-body{padding:22px 26px;}
+.modal-footer{padding:14px 26px;background:var(--parchment);display:flex;gap:8px;justify-content:flex-end;}
+
+/* TABS inside modal */
+.modal-tabs{display:flex;border-bottom:2px solid var(--warm-stone);margin-bottom:22px;}
+.modal-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.modal-tab.active{color:var(--sage-dark);border-bottom-color:var(--sage-dark);}
+
+/* FORMS */
+.form-group{margin-bottom:16px;}
+.form-label{font-size:12px;font-weight:700;color:var(--deep-clay);margin-bottom:5px;display:block;letter-spacing:.3px;}
+.form-input,.form-select,.form-textarea{width:100%;padding:11px 14px;border:1.5px solid var(--warm-stone);border-radius:9px;font-size:13px;font-family:'Raleway',sans-serif;color:var(--deep-clay);outline:none;transition:border-color .2s;background:var(--white);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--sage);}
+.form-hint{font-size:11px;color:var(--muted);margin-top:4px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-error{font-size:11px;color:var(--terracotta);margin-top:4px;}
+
+/* CONTACT TYPE */
+.contact-type-row{display:flex;gap:8px;margin-bottom:8px;}
+.contact-type-btn{flex:1;padding:9px;border-radius:9px;border:1.5px solid var(--warm-stone);background:var(--parchment);cursor:pointer;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s;}
+.contact-type-btn.active{border-color:var(--sage);background:rgba(99,102,241,.08);color:var(--sage-dark);}
+.duration-selector{display:flex;gap:7px;}
+.duration-btn{flex:1;padding:9px;border-radius:9px;border:1.5px solid var(--warm-stone);background:var(--parchment);cursor:pointer;font-size:12px;font-weight:600;text-align:center;transition:all .2s;}
+.duration-btn.active{border-color:var(--deep-clay);background:var(--deep-clay);color:var(--white);}
+
+/* CALENDAR */
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:14px;}
+.cal-day-label{text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:5px 0;}
+.cal-day{aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all .2s;}
+.cal-day.empty{cursor:default;}
+.cal-day.past{color:#ccc;cursor:default;}
+.cal-day.today{font-weight:800;}
+.cal-day.selected{background:var(--deep-clay);color:var(--white);}
+.cal-day.has-slots{background:rgba(99,102,241,.18);color:var(--sage-dark);font-weight:600;}
+.cal-day.has-slots:hover{background:rgba(99,102,241,.25);}
+.cal-month{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cal-month-name{font-family:'Lora',serif;font-size:15px;}
+.cal-nav{background:none;border:1.5px solid var(--warm-stone);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:13px;transition:all .2s;}
+.cal-nav:hover{border-color:var(--sage);}
+.time-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.time-slot{padding:8px 4px;border-radius:8px;text-align:center;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;border:1.5px solid var(--warm-stone);}
+.time-slot.available{color:var(--sage-dark);background:rgba(99,102,241,.06);}
+.time-slot.available:hover{background:var(--sage-dark);color:var(--white);border-color:var(--sage-dark);}
+.time-slot.selected{background:var(--deep-clay);color:var(--white);border-color:var(--deep-clay);}
+.time-slot.blocked{color:#bbb;background:#f8f8f8;cursor:not-allowed;border-color:#eee;}
+
+/* BOOKING CONFIRM */
+.confirm-box{background:var(--deep-clay);border-radius:14px;padding:24px;color:var(--white);text-align:center;margin-bottom:16px;}
+.booking-id{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--gold);letter-spacing:3px;margin:10px 0;}
+.confirm-detail{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:5px;}
+.confirm-detail strong{color:var(--white);}
+.notice-box{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--sage-dark);line-height:1.6;}
+.manage-status-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:14px;}
+.status-confirmed{background:rgba(67,56,202,.12);color:var(--sage-dark);}
+.status-cancelled{background:rgba(196,113,74,.15);color:var(--terracotta);}
+
+/* REGISTER STEPS */
+.step-indicator{display:flex;gap:0;margin-bottom:24px;}
+.step{flex:1;text-align:center;position:relative;padding-bottom:10px;border-bottom:3px solid var(--warm-stone);font-size:11px;color:var(--muted);transition:all .2s;}
+.step.active{border-bottom-color:var(--sage-dark);color:var(--sage-dark);font-weight:700;}
+.step.done{border-bottom-color:var(--sage-light);}
+.photo-upload-area{border:2px dashed var(--warm-stone);border-radius:14px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;background:var(--parchment);}
+.photo-upload-area:hover{border-color:var(--sage);background:rgba(99,102,241,.04);}
+.photo-previews{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.photo-preview{width:72px;height:72px;border-radius:9px;object-fit:cover;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-size:24px;}
+.skill-select-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+.skill-check{border:1.5px solid var(--warm-stone);border-radius:9px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:7px;font-size:12px;transition:all .2s;}
+.skill-check.checked{border-color:var(--sage);background:rgba(99,102,241,.08);color:var(--sage-dark);}
+.availability-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px;}
+.avail-day{border:1.5px solid var(--warm-stone);border-radius:7px;padding:7px 3px;text-align:center;cursor:pointer;font-size:11px;transition:all .2s;}
+.avail-day.active{border-color:var(--sage-dark);background:var(--sage-dark);color:var(--white);}
+
+/* TOKEN PACKAGES */
+.token-packages{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.token-pkg{border:2px solid var(--warm-stone);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.token-pkg:hover,.token-pkg.selected{border-color:var(--gold);background:rgba(201,168,76,.05);}
+.token-pkg.popular::before{content:'BEST';position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--deep-clay);font-size:8px;font-weight:800;padding:2px 7px;border-radius:8px;letter-spacing:1px;}
+.token-amount{font-family:'Lora',serif;font-size:26px;font-weight:700;color:var(--gold);}
+.token-label{font-size:10px;color:var(--muted);margin-bottom:6px;}
+.token-price{font-size:16px;font-weight:700;color:var(--deep-clay);}
+.token-value{font-size:10px;color:var(--sage);}
+
+/* AD MANAGER TABLE */
+.ad-table{width:100%;border-collapse:collapse;font-size:12px;}
+.ad-table th{text-align:left;padding:8px 10px;font-size:10px;letter-spacing:1px;color:var(--muted);font-weight:700;border-bottom:2px solid var(--warm-stone);text-transform:uppercase;}
+.ad-table td{padding:10px 10px;border-bottom:1px solid var(--warm-stone);vertical-align:middle;}
+.ad-table tr:last-child td{border-bottom:none;}
+.ad-table tr:hover td{background:var(--parchment);}
+.ad-status-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.ad-active{background:rgba(67,56,202,.12);color:var(--sage-dark);}
+.ad-inactive{background:rgba(138,128,120,.12);color:var(--muted);}
+.ad-paused{background:rgba(201,168,76,.15);color:#065F46;}
+.icon-btn{background:none;border:1.5px solid var(--warm-stone);padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px;transition:all .2s;}
+.icon-btn:hover{border-color:var(--sage);background:rgba(99,102,241,.08);}
+.icon-btn.danger:hover{border-color:var(--terracotta);background:rgba(196,113,74,.08);}
+
+/* AUTH */
+.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--muted);font-size:12px;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--warm-stone);}
+.social-btn{width:100%;padding:10px;border:1.5px solid var(--warm-stone);border-radius:9px;background:var(--white);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;font-family:'Raleway',sans-serif;}
+.social-btn:hover{border-color:var(--sage);background:var(--parchment);}
+.user-menu{position:absolute;top:52px;right:0;background:var(--white);border-radius:14px;box-shadow:var(--shadow-lg);min-width:220px;overflow:hidden;z-index:300;display:none;animation:slideUp .2s ease;}
+.user-menu.show{display:block;}
+.user-menu-header{padding:14px 16px;background:var(--parchment);border-bottom:1px solid var(--warm-stone);}
+.user-menu-name{font-weight:700;font-size:14px;margin-bottom:2px;}
+.user-menu-email{font-size:11px;color:var(--muted);}
+.user-menu-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:'Raleway',sans-serif;color:var(--deep-clay);}
+.user-menu-item:hover{background:var(--parchment);}
+.user-menu-item.danger{color:var(--terracotta);}
+.user-menu-sep{height:1px;background:var(--warm-stone);}
+.header-user-area{position:relative;}
+
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.dash-card{background:var(--parchment);border-radius:12px;padding:16px;border:1px solid var(--warm-stone);}
+.dash-num{font-family:'Lora',serif;font-size:28px;font-weight:700;color:var(--deep-clay);}
+.dash-label{font-size:11px;color:var(--muted);margin-top:2px;}
+.dash-booking-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--warm-stone);}
+.dash-booking-row:last-child{border-bottom:none;}
+
+/* PROFILE VIEW */
+.profile-header-modal{display:flex;gap:18px;align-items:flex-start;margin-bottom:20px;}
+.profile-avatar{width:90px;height:90px;border-radius:18px;flex-shrink:0;background:linear-gradient(135deg,var(--sage-light),var(--sage-dark));display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;}
+.media-row{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto;}
+.media-thumb{width:110px;height:72px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,var(--warm-stone),var(--sage-light));display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;border:2px solid transparent;transition:border-color .2s;}
+.media-thumb:hover{border-color:var(--sage);}
+.section-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;margin-top:18px;}
+.about-text{font-size:13px;line-height:1.7;color:#555;}
+
+/* SUMMARY BOX */
+.summary-box{background:var(--parchment);border-radius:10px;padding:12px 14px;margin-top:10px;}
+.summary-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;}
+.summary-total{display:flex;justify-content:space-between;font-size:15px;font-weight:800;border-top:1px solid var(--warm-stone);padding-top:9px;margin-top:5px;}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-icon{font-size:52px;margin-bottom:16px;}
+.empty-title{font-family:'Lora',serif;font-size:22px;margin-bottom:8px;}
+.empty-sub{font-size:14px;color:var(--muted);}
+
+/* LOOKUP */
+.lookup-box{background:var(--parchment);border-radius:14px;padding:22px;text-align:center;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--deep-clay);color:var(--white);padding:12px 22px;border-radius:40px;font-size:13px;font-weight:500;z-index:999;transition:transform .4s cubic-bezier(.175,.885,.32,1.275);box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* BILINGUAL */
+[data-zh]{display:none;}
+body.zh [data-en]{display:none;}
+body.zh [data-zh]{display:block;}
+body.zh span[data-zh]{display:inline;}
+body.zh span[data-en]{display:none;}
+span[data-zh]{display:none;}
+span[data-en]{display:inline;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .header-actions .btn-secondary{display:none;}
+  .hero{padding:36px 14px 52px;}
+  .talent-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .token-packages{grid-template-columns:1fr;}
+  .skill-select-grid{grid-template-columns:1fr;}
+  .profile-header-modal{flex-direction:column;}
+  .dash-grid{grid-template-columns:1fr 1fr;}
+  .time-slots{grid-template-columns:repeat(3,1fr);}
+}
+input[type="file"]{display:none;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--parchment);}
+::-webkit-scrollbar-thumb{background:var(--warm-stone);border-radius:3px;}
+
+/* AD EDIT INLINE */
+.ad-edit-row{background:rgba(99,102,241,.05);border:1.5px solid rgba(99,102,241,.15);border-radius:10px;padding:12px;margin-top:8px;display:none;}
+.ad-edit-row.open{display:block;animation:slideUp .15s ease;}
+.char-count{font-size:10px;color:var(--muted);text-align:right;margin-top:3px;}
+/* live preview badge inside edit row */
+.ad-preview-strip{background:var(--deep-clay);border-radius:7px;padding:7px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:11px;}
+.ad-preview-strip .ad-badge{font-size:8px;padding:1px 5px;}
+.ad-preview-strip .ad-text{color:var(--warm-stone);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ad-preview-strip .ad-cta{color:var(--sage-light);font-weight:600;white-space:nowrap;}
+
+/* ── UI-UX Pro Max Overrides ───────────────────────────── */
+/* Flat Design: remove heavy shadows from cards */
+.talent-card{box-shadow:var(--shadow);border:1.5px solid var(--warm-stone);}
+.talent-card:hover{box-shadow:var(--shadow-lg);border-color:var(--sage-light);transform:translateY(-2px);}
+
+/* Header: crisp indigo bar */
+.header{border-bottom:1px solid rgba(255,255,255,.06);}
+
+/* Logo sub: use sage-light (already indigo-mapped) */
+.logo-sub{letter-spacing:3px;font-size:9px;opacity:.8;}
+
+/* Hero eyebrow: thinner border */
+.hero-eyebrow{border-width:1px;font-size:10px;}
+
+/* Filter chips: emerald active state */
+.filter-chip.active,.filter-chip:hover{background:var(--sage-dark);border-color:var(--sage-dark);}
+
+/* Btn-book primary: emerald green for key CTAs */
+.btn-book{background:var(--gold);border-radius:var(--radius-sm);}
+.btn-book:hover{background:#047857;color:#fff;}
+
+/* Card footer: keep btn-book emerald */
+.card-footer .btn-book{background:var(--gold);}
+.card-footer .btn-book:hover{background:#047857;}
+
+/* Modal: slightly less rounded for flat design */
+.modal{border-radius:16px;}
+
+/* Skill pills: indigo tint */
+.skill-pill{background:rgba(99,102,241,.1);color:var(--sage-dark);border-color:rgba(99,102,241,.25);}
+
+/* Card photo gradient: indigo-to-violet */
+.card-photo{background:linear-gradient(135deg,#818CF8,#4338CA);}
+.profile-avatar{background:linear-gradient(135deg,#818CF8,#4338CA);}
+
+/* Token/gold badge: emerald */
+.token-badge{background:var(--gold);color:#fff;}
+.token-badge .token-amount{color:#fff;}
+
+/* Token amount label */
+.token-amount{color:var(--gold);}
+
+/* Step indicator */
+.step.active{border-bottom-color:var(--gold);color:var(--gold);}
+.step.done{border-bottom-color:var(--sage-light);}
+
+/* Modal tab active */
+.modal-tab.active{color:var(--sage-dark);border-bottom-color:var(--sage-dark);}
+
+/* Confirm booking-id colour → emerald */
+.booking-id{color:var(--gold);}
+
+/* Notice box */
+.notice-box{border-color:rgba(99,102,241,.25);color:var(--sage-dark);background:rgba(99,102,241,.06);}
+
+/* Available badge: emerald */
+.avail-yes{background:rgba(5,150,105,.85);}
+
+/* Form focus */
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--sage);}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb{background:var(--sage-light);}
+
+/* Stat section */
+.stat-num{font-family:'Lora',serif;}
+.section-title{font-family:'Lora',serif;}
+.card-name{font-family:'Lora',serif;}
+.modal-title{font-family:'Lora',serif;}
+
+/* Hero h1 accent span */
+.hero h1 span{color:#a5b4fc;}
+
+/* Summary total accent */
+.summary-total span:last-child{color:var(--gold);}
+
+/* Dash num */
+.dash-num{color:var(--deep-clay);}
+
+/* Calendar selected */
+.cal-day.selected{background:var(--sage-dark);}
+.cal-day.has-slots{background:rgba(99,102,241,.12);color:var(--sage-dark);}
+.cal-day.has-slots:hover{background:rgba(99,102,241,.25);}
+
+/* Time slot selected */
+.time-slot.selected{background:var(--sage-dark);border-color:var(--sage-dark);}
+.time-slot.available{color:var(--sage-dark);background:rgba(99,102,241,.06);}
+.time-slot.available:hover{background:var(--sage-dark);border-color:var(--sage-dark);}
+
+/* Duration btn active */
+.duration-btn.active{background:var(--deep-clay);border-color:var(--deep-clay);}
+
+/* Contact type btn */
+.contact-type-btn.active{border-color:var(--sage);background:rgba(99,102,241,.08);color:var(--sage-dark);}
+
+/* Card rate colour */
+.card-rate{color:var(--gold);}
+
+/* skill-check */
+.skill-check.checked{border-color:var(--sage);background:rgba(99,102,241,.08);color:var(--sage-dark);}
+
+/* Avail day active */
+.avail-day.active{border-color:var(--sage-dark);background:var(--sage-dark);}
+
+/* Ad status active */
+.ad-active{background:rgba(5,150,105,.12);color:#047857;}
+
+/* Icon btn hover */
+.icon-btn:hover{border-color:var(--sage);background:rgba(99,102,241,.08);}
+/* ── end overrides ── */
+
+
+/* ══════════════════════════════════════════════════════════════
+   ZenFlow iOS — Native App Experience
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Safe area & base ──────────────────────────────────────── */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tab-h: 83px;  /* 49px bar + 34px home indicator */
+  --status-h: 44px;
+}
+
+/* Disable all browser gestures/highlights for native feel */
+* { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+input, textarea, select { -webkit-tap-highlight-color: transparent; }
+
+/* ── Body: push content above tab bar ─────────────────────── */
+body {
+  padding-bottom: var(--tab-h);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
+/* ── Header: sit under iOS status bar ─────────────────────── */
+.header {
+  padding-top: var(--safe-top);
+  height: calc(56px + var(--safe-top));
+}
+.header-inner { height: 56px; }
+
+/* ── Filter bar: offset for taller header ──────────────────── */
+.filter-bar { top: calc(56px + var(--safe-top)); }
+
+/* ── Minimum 44px touch targets (Apple HIG) ────────────────── */
+.btn-primary, .btn-secondary, .btn-book, .btn-view,
+.filter-chip, .lang-toggle, .close-btn, .user-avatar-btn,
+.cal-nav, .icon-btn, .social-btn {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.filter-chip { min-width: unset; }
+
+/* ── Remove hover effects on touch (iOS doesn't hover) ─────── */
+@media (hover: none) {
+  .talent-card:hover { transform: none; box-shadow: var(--shadow); }
+  .btn-book:hover, .btn-primary:hover { filter: brightness(0.93); }
+}
+
+/* Active press state — instant tactile feedback */
+.talent-card:active { transform: scale(0.985); transition: transform 0.1s; }
+.btn-book:active, .btn-primary:active, .filter-chip:active { 
+  transform: scale(0.96); transition: transform 0.08s; opacity: 0.88; 
+}
+
+/* ── iOS-style momentum scroll in modals ───────────────────── */
+.overlay { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.modal-body { -webkit-overflow-scrolling: touch; max-height: 72vh; overflow-y: auto; }
+.filter-inner { -webkit-overflow-scrolling: touch; }
+
+/* ── Modal: slides up from bottom like a sheet ─────────────── */
+.overlay { align-items: flex-end; padding: 0; }
+.modal {
+  border-radius: 22px 22px 0 0;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding-bottom: var(--safe-bottom);
+  max-height: 92vh;
+  animation: sheetUp 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.modal.wide-modal { max-height: 96vh; }
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* Sheet handle pill */
+.modal::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 5px;
+  background: rgba(0,0,0,.15);
+  border-radius: 3px;
+  margin: 10px auto 0;
+}
+
+/* ── Bottom Tab Bar ─────────────────────────────────────────── */
+.ios-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--tab-h);
+  padding-bottom: var(--safe-bottom);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 0.5px solid rgba(0,0,0,.12);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding-top: 8px;
+  z-index: 500;
+}
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  cursor: pointer;
+  padding: 4px 0;
+  min-height: 49px;
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-item:active { opacity: 0.6; transform: scale(0.92); }
+.tab-icon {
+  font-size: 22px;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tab-item.active .tab-icon { transform: scale(1.12); }
+.tab-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.2px;
+}
+.tab-item.active .tab-label { color: var(--sage); }
+.tab-item.active .tab-icon { filter: none; }
+
+/* Tab badge */
+.tab-badge {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  background: #EF4444;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 1.5px solid #fff;
+}
+.tab-icon-wrap { position: relative; display: inline-flex; }
+
+/* ── Pull-to-refresh indicator ──────────────────────────────── */
+.ptr-indicator {
+  position: fixed;
+  top: calc(var(--safe-top) + 60px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--white);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  box-shadow: var(--shadow-lg);
+  z-index: 150;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Raleway', sans-serif;
+}
+.ptr-indicator.show { display: flex; }
+
+/* ── iOS Toast — appears above tab bar ─────────────────────── */
+.toast { bottom: calc(var(--tab-h) + 16px); border-radius: 14px; }
+
+/* ── Search bar: full width, native-like ───────────────────── */
+.search-bar {
+  font-size: 16px; /* prevent iOS auto-zoom on focus */
+}
+
+/* ── Inputs: 16px to prevent iOS auto-zoom ─────────────────── */
+.form-input, .form-select, .form-textarea { font-size: 16px; }
+
+/* ── Hero: compact on small screens ────────────────────────── */
+@media (max-width: 390px) {
+  .hero { padding: 28px 16px 44px; }
+  .hero h1 { font-size: 26px; }
+  .hero-stats { gap: 20px; }
+}
+
+/* ── Card grid: single col on mobile ───────────────────────── */
+@media (max-width: 768px) {
+  .talent-grid { grid-template-columns: 1fr; gap: 12px; }
+  .main { padding: 20px 14px 20px; }
+}
+
+/* ── Smooth iOS keyboard avoidance ─────────────────────────── */
+@supports (-webkit-touch-callout: none) {
+  .overlay {
+    height: -webkit-fill-available;
+  }
+}
+
+/* ── Haptic ripple on tap ───────────────────────────────────── */
+@keyframes tapRipple {
+  0%   { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(4); opacity: 0; }
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  background: rgba(99,102,241,0.25);
+  pointer-events: none;
+  animation: tapRipple 0.5s ease-out forwards;
+  transform-origin: center;
+  margin: -20px;
+}
+
+/* ── Header: hide desktop-only items on mobile ──────────────── */
+@media (max-width: 768px) {
+  .header-actions .btn-secondary { display: none; }
+  .header-actions .btn-primary { display: none; }   /* replaced by tab bar */
+  .token-badge { padding: 5px 8px; font-size: 11px; }
+}
+
+</style>
+
+<!-- ── Web App Manifest (inline) ─────────────────────────── -->
+<script>
+const _manifest = {
+  name: "ZenFlow — Talent On Demand",
+  short_name: "ZenFlow",
+  description: "Book certified wellness professionals on demand",
+  start_url: "./",
+  display: "standalone",
+  orientation: "portrait",
+  background_color: "#1E1B4B",
+  theme_color: "#1E1B4B",
+  icons: [
+    { src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='48' fill='%231E1B4B'/><text y='140' x='50%' text-anchor='middle' font-size='120'>🌿</text></svg>", sizes: "192x192", type: "image/svg+xml" },
+    { src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%231E1B4B'/><text y='380' x='50%' text-anchor='middle' font-size='320'>🌿</text></svg>", sizes: "512x512", type: "image/svg+xml" }
+  ]
+};
+const _blob = new Blob([JSON.stringify(_manifest)], {type:'application/json'});
+const _url = URL.createObjectURL(_blob);
+const _link = document.createElement('link');
+_link.rel = 'manifest'; _link.href = _url;
+document.head.appendChild(_link);
+</script>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="scrollToTop()">
+      <span style="font-size:22px">🌿</span>
+      <div>ZenFlow<span class="logo-sub"><span data-en>TALENT ON DEMAND</span><span data-zh>人才随选平台</span></span></div>
+    </div>
+    <div class="header-actions">
+      <div class="token-badge" onclick="openTokenModal()" id="tokenBadge" style="display:none">
+        🪙 <span id="tokenCount">0</span>
+      </div>
+      <button class="btn-secondary" onclick="openManageModal()"><span data-en>My Booking</span><span data-zh>我的预约</span></button>
+      <button class="btn-primary" onclick="openRegisterOrListModal()"><span data-en>List Yourself</span><span data-zh>入驻平台</span></button>
+      <!-- Auth area -->
+      <div class="header-user-area" id="headerUserArea">
+        <button class="lang-toggle" onclick="toggleLang()" id="langBtn">中文</button>
+        <button class="btn-secondary" onclick="openAuthModal('login')" id="loginHeaderBtn"><span data-en>Sign In</span><span data-zh>登录</span></button>
+        <div id="userAvatarWrap" style="display:none;position:relative;">
+          <button class="user-avatar-btn" id="userAvatarBtn" onclick="toggleUserMenu()"></button>
+          <div class="user-menu" id="userMenu">
+            <div class="user-menu-header">
+              <div class="user-menu-name" id="menuName"></div>
+              <div class="user-menu-email" id="menuEmail"></div>
+            </div>
+            <button class="user-menu-item" onclick="openDashboard()">📊 <span data-en>Dashboard</span><span data-zh>控制台</span></button>
+            <button class="user-menu-item" onclick="openAdManager()">📢 <span data-en>My Ads</span><span data-zh>我的广告</span></button>
+            <button class="user-menu-item" onclick="openTokenModal()">🪙 <span data-en>Buy Tokens</span><span data-zh>购买积分</span></button>
+            <div class="user-menu-sep"></div>
+            <button class="user-menu-item" onclick="openProfileEditor()">⚙️ <span data-en>Edit Profile</span><span data-zh>编辑资料</span></button>
+            <button class="user-menu-item danger" onclick="logoutUser()">↩ <span data-en>Sign Out</span><span data-zh>退出登录</span></button>
+          </div>
+        </div>
+        <button class="lang-toggle" onclick="toggleLang()" id="langBtn2" style="display:none">中文</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- AD BANNER -->
+<div class="ad-carousel"><div class="ad-track" id="adTrack"></div></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">✦ <span data-en>Wellness. Renewed.</span><span data-zh>身心愉悦，随时预约</span></div>
+    <h1><span data-en>Find Your Perfect<br><span>Wellness Professional</span></span><span data-zh>发现您的<br><span>专属健康达人</span></span></h1>
+    <p class="hero-sub" data-en>Book certified massage therapists, wellness coaches and body care specialists — in minutes.</p>
+    <p class="hero-sub" data-zh style="display:none">即刻预约认证按摩师、健康教练及美体专家，轻松找到附近优质服务。</p>
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input class="search-bar" id="searchInput" placeholder="Try: deep tissue near Orchard, Thai massage today, facial under $80…" oninput="handleSearch(this.value)" onfocus="showSugg()" onblur="hideSugg()">
+      <button class="search-btn" onclick="doSearch()"><span data-en>Search</span><span data-zh>搜索</span></button>
+      <div class="search-suggestions" id="searchSugg">
+        <div class="suggestion-item" onmousedown="selectSugg('Swedish massage')">🌿 Swedish massage <span class="stag">Massage</span></div>
+        <div class="suggestion-item" onmousedown="selectSugg('deep tissue near me')">💪 Deep tissue near me <span class="stag">Location</span></div>
+        <div class="suggestion-item" onmousedown="selectSugg('Thai massage today')">🧘 Thai massage today <span class="stag">Availability</span></div>
+        <div class="suggestion-item" onmousedown="selectSugg('facial treatment under $80')">✨ Facial under $80 <span class="stag">Budget</span></div>
+        <div class="suggestion-item" onmousedown="selectSugg('reflexology weekend')">🦶 Reflexology weekend <span class="stag">Specialty</span></div>
+        <div class="suggestion-item" onmousedown="selectSugg('aromatherapy female therapist')">🌸 Aromatherapy female <span class="stag">Filter</span></div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">328+</div><div class="stat-label"><span data-en>THERAPISTS</span><span data-zh>治疗师</span></div></div>
+      <div class="stat"><div class="stat-num">14K+</div><div class="stat-label"><span data-en>SESSIONS BOOKED</span><span data-zh>已完成预约</span></div></div>
+      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label"><span data-en>AVG RATING</span><span data-zh>平均评分</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="filter-chip active" onclick="filterSkill('all',this)">🌿 <span data-en>All</span><span data-zh>全部</span></div>
+    <div class="filter-chip" onclick="filterSkill('Swedish Massage',this)">Swedish</div>
+    <div class="filter-chip" onclick="filterSkill('Thai Massage',this)">Thai</div>
+    <div class="filter-chip" onclick="filterSkill('Deep Tissue',this)">Deep Tissue</div>
+    <div class="filter-chip" onclick="filterSkill('Aromatherapy',this)">Aromatherapy</div>
+    <div class="filter-chip" onclick="filterSkill('Reflexology',this)">Reflexology</div>
+    <div class="filter-chip" onclick="filterSkill('Hot Stone',this)">Hot Stone</div>
+    <div class="filter-chip" onclick="filterSkill('Facial',this)">Facial</div>
+    <div class="filter-chip" onclick="filterSkill('available',this)">🟢 <span data-en>Available Now</span><span data-zh>立即可约</span></div>
+    <div class="filter-divider"></div>
+    <select class="sort-select" onchange="sortTalents(this.value)">
+      <option value="featured">Featured</option>
+      <option value="rating">Top Rated</option>
+      <option value="price_low">Price ↑</option>
+      <option value="price_high">Price ↓</option>
+    </select>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="section-header">
+    <h2 class="section-title"><span data-en>Our Wellness Experts</span><span data-zh>健康专家</span></h2>
+    <span class="results-count" id="resultsCount"></span>
+  </div>
+  <div class="talent-grid" id="talentGrid"></div>
+  <div class="empty-state" id="emptyState" style="display:none">
+    <div class="empty-icon">🔍</div>
+    <div class="empty-title"><span data-en>No matches found</span><span data-zh>未找到结果</span></div>
+    <div class="empty-sub"><span data-en>Try different keywords or filters</span><span data-zh>请尝试其他关键词</span></div>
+  </div>
+</main>
+
+<!-- ════════════ AUTH MODAL ════════════ -->
+<div class="overlay" id="authOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="authTitle"><span data-en>Welcome to ZenFlow</span><span data-zh>欢迎使用 ZenFlow</span></div>
+      <button class="close-btn" onclick="closeOverlay('authOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <div class="modal-tab active" id="tabLogin" onclick="switchAuthTab('login')"><span data-en>Sign In</span><span data-zh>登录</span></div>
+        <div class="modal-tab" id="tabRegister" onclick="switchAuthTab('register')"><span data-en>Create Account</span><span data-zh>注册账号</span></div>
+      </div>
+      <!-- LOGIN -->
+      <div id="loginForm">
+        <div class="form-group">
+          <label class="form-label"><span data-en>Email Address</span><span data-zh>电子邮箱</span></label>
+          <input class="form-input" id="loginEmail" type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span data-en>Password</span><span data-zh>密码</span></label>
+          <input class="form-input" id="loginPwd" type="password" placeholder="••••••••">
+          <div style="text-align:right;margin-top:5px"><span style="font-size:11px;color:var(--sage);cursor:pointer" onclick="showToast('Password reset email sent','📧')"><span data-en>Forgot password?</span><span data-zh>忘记密码？</span></span></div>
+        </div>
+        <div id="loginError" class="form-error" style="display:none;margin-bottom:10px"></div>
+        <button class="btn-book" style="width:100%;padding:12px;font-size:14px" onclick="doLogin()"><span data-en>Sign In</span><span data-zh>登录</span></button>
+        <div class="auth-divider"><span data-en>or continue with</span><span data-zh>或通过以下方式</span></div>
+        <button class="social-btn" onclick="socialLogin('Google')">🔵 <span data-en>Continue with Google</span><span data-zh>使用 Google 登录</span></button>
+        <button class="social-btn" style="margin-top:8px" onclick="socialLogin('WeChat')">🟢 <span data-en>Continue with WeChat</span><span data-zh>使用微信登录</span></button>
+      </div>
+      <!-- REGISTER -->
+      <div id="registerAuthForm" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"><span data-en>First Name</span><span data-zh>名字</span></label>
+            <input class="form-input" id="regFirstName" placeholder="Sarah">
+          </div>
+          <div class="form-group">
+            <label class="form-label"><span data-en>Last Name</span><span data-zh>姓氏</span></label>
+            <input class="form-input" id="regLastName" placeholder="Chen">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span data-en>Email Address</span><span data-zh>电子邮箱</span></label>
+          <input class="form-input" id="regEmail" type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span data-en>Password</span><span data-zh>密码</span></label>
+          <input class="form-input" id="regPwd" type="password" placeholder="Min. 8 characters">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span data-en>Confirm Password</span><span data-zh>确认密码</span></label>
+          <input class="form-input" id="regPwd2" type="password" placeholder="Re-enter password">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span data-en>Account Type</span><span data-zh>账号类型</span></label>
+          <div style="display:flex;gap:8px">
+            <div class="contact-type-btn active" id="typeCustomer" onclick="setAccType('customer')">👤 <span data-en>Customer</span><span data-zh>客户</span></div>
+            <div class="contact-type-btn" id="typePro" onclick="setAccType('professional')">💼 <span data-en>Professional</span><span data-zh>专业人士</span></div>
+          </div>
+        </div>
+        <div id="regError" class="form-error" style="display:none;margin-bottom:10px"></div>
+        <button class="btn-book" style="width:100%;padding:12px;font-size:14px" onclick="doRegister()"><span data-en>Create Account</span><span data-zh>创建账号</span></button>
+        <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px"><span data-en>By signing up you agree to our Terms of Service and Privacy Policy.</span><span data-zh>注册即表示您同意我们的服务条款和隐私政策。</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PROFILE MODAL ════════════ -->
+<div class="overlay" id="profileOverlay">
+  <div class="modal wide-modal">
+    <div class="modal-header">
+      <div class="modal-title" id="profileModalTitle">Profile</div>
+      <button class="close-btn" onclick="closeOverlay('profileOverlay')">✕</button>
+    </div>
+    <div class="modal-body" id="profileModalBody"></div>
+  </div>
+</div>
+
+<!-- ════════════ BOOKING MODAL ════════════ -->
+<div class="overlay" id="bookingOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title"><span data-en>Book a Session</span><span data-zh>预约服务</span></div>
+      <button class="close-btn" onclick="closeOverlay('bookingOverlay')">✕</button>
+    </div>
+    <div class="modal-body" id="bookingBody"></div>
+  </div>
+</div>
+
+<!-- ════════════ CONFIRM MODAL ════════════ -->
+<div class="overlay" id="confirmOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🎉 <span data-en>Booking Confirmed!</span><span data-zh>预约成功！</span></div>
+      <button class="close-btn" onclick="closeOverlay('confirmOverlay')">✕</button>
+    </div>
+    <div class="modal-body" id="confirmBody"></div>
+    <div class="modal-footer">
+      <button class="btn-book" style="min-width:120px" onclick="closeOverlay('confirmOverlay')"><span data-en>Done</span><span data-zh>完成</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ MANAGE / LOOKUP BOOKING ════════════ -->
+<div class="overlay" id="manageOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title"><span data-en>Find Your Booking</span><span data-zh>查找预约</span></div>
+      <button class="close-btn" onclick="closeOverlay('manageOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="lookup-box">
+        <div style="font-size:32px;margin-bottom:10px">📋</div>
+        <h3 style="margin-bottom:6px;font-family:'Lora',serif"><span data-en>Enter your Booking ID</span><span data-zh>输入预约编号</span></h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px"><span data-en>No login needed — just your unique ID to view, edit or cancel.</span><span data-zh>无需登录，凭预约编号即可查看、修改或取消。</span></p>
+        <input class="form-input" id="lookupId" placeholder="e.g. ZF-2025-A7K3" style="text-align:center;font-family:'DM Mono',monospace;font-size:17px;letter-spacing:2px;margin-bottom:10px" onkeydown="if(event.key==='Enter')lookupBooking()">
+        <button class="btn-book" onclick="lookupBooking()" style="width:100%"><span data-en>Find Booking</span><span data-zh>查找预约</span></button>
+      </div>
+      <div id="bookingDetails" style="margin-top:18px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ REGISTER TALENT (4-step) ════════════ -->
+<div class="overlay" id="registerOverlay">
+  <div class="modal wide-modal">
+    <div class="modal-header">
+      <div class="modal-title"><span data-en>Join as a Professional</span><span data-zh>专业人士入驻</span></div>
+      <button class="close-btn" onclick="closeOverlay('registerOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="step-indicator" id="regSteps">
+        <div class="step active" data-step="1"><span data-en>Profile</span><span data-zh>资料</span></div>
+        <div class="step" data-step="2"><span data-en>Skills</span><span data-zh>技能</span></div>
+        <div class="step" data-step="3"><span data-en>Schedule</span><span data-zh>排期</span></div>
+        <div class="step" data-step="4"><span data-en>Media</span><span data-zh>媒体</span></div>
+      </div>
+      <div id="regStep1">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label"><span data-en>Full Name</span><span data-zh>全名</span></label><input class="form-input" id="rName" placeholder="Sarah Chen"></div>
+          <div class="form-group"><label class="form-label"><span data-en>Display Title</span><span data-zh>职称</span></label><input class="form-input" id="rTitle" placeholder="Senior Massage Therapist"></div>
+        </div>
+        <div class="form-group"><label class="form-label"><span data-en>Service Area</span><span data-zh>服务地点</span></label><input class="form-input" id="rArea" placeholder="e.g. Orchard, Bugis — Singapore"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label"><span data-en>Hourly Rate ($)</span><span data-zh>每小时收费</span></label><input class="form-input" id="rRate" type="number" placeholder="80"></div>
+          <div class="form-group"><label class="form-label"><span data-en>Years Experience</span><span data-zh>从业年数</span></label><input class="form-input" id="rExp" type="number" placeholder="5"></div>
+        </div>
+        <div class="form-group"><label class="form-label"><span data-en>About You</span><span data-zh>个人介绍</span></label><textarea class="form-textarea" id="rBio" rows="3" placeholder="Describe your approach, certifications, and what makes your sessions unique…"></textarea></div>
+        <div class="form-group"><label class="form-label"><span data-en>WhatsApp / WeChat Contact</span><span data-zh>联系方式</span></label><input class="form-input" id="rContact" placeholder="+65 91234567 or WeChat ID"></div>
+      </div>
+      <div id="regStep2" style="display:none">
+        <p class="section-label"><span data-en>Select Your Specialties</span><span data-zh>选择专项服务</span></p>
+        <div class="skill-select-grid" id="skillCheckGrid"></div>
+      </div>
+      <div id="regStep3" style="display:none">
+        <p class="section-label"><span data-en>Available Days</span><span data-zh>可预约日期</span></p>
+        <div class="availability-grid">
+          <div class="avail-day" onclick="toggleDay(this)">Mon</div>
+          <div class="avail-day active" onclick="toggleDay(this)">Tue</div>
+          <div class="avail-day active" onclick="toggleDay(this)">Wed</div>
+          <div class="avail-day active" onclick="toggleDay(this)">Thu</div>
+          <div class="avail-day active" onclick="toggleDay(this)">Fri</div>
+          <div class="avail-day" onclick="toggleDay(this)">Sat</div>
+          <div class="avail-day" onclick="toggleDay(this)">Sun</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label"><span data-en>Start Time</span><span data-zh>开始时间</span></label><input class="form-input" type="time" value="09:00"></div>
+          <div class="form-group"><label class="form-label"><span data-en>End Time</span><span data-zh>结束时间</span></label><input class="form-input" type="time" value="20:00"></div>
+        </div>
+        <p class="section-label" style="margin-top:16px"><span data-en>Block Unavailable Dates</span><span data-zh>标记不可预约日期</span></p>
+        <input class="form-input" type="date" id="rBlockDate" style="margin-bottom:6px">
+        <button class="btn-view" onclick="addBlockDate()" style="width:100%;margin-bottom:6px"><span data-en>+ Add Block Date</span><span data-zh>+ 添加屏蔽日期</span></button>
+        <div id="blockedDates" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+      <div id="regStep4" style="display:none">
+        <p class="section-label"><span data-en>Upload Photos (up to 6)</span><span data-zh>上传照片（最多6张）</span></p>
+        <div class="photo-upload-area" onclick="document.getElementById('photoUpload').click()">
+          <div style="font-size:40px;margin-bottom:8px">📷</div>
+          <p style="font-size:13px;color:var(--muted)"><span data-en>Click to upload professional photos</span><span data-zh>点击上传专业照片</span></p>
+        </div>
+        <input type="file" id="photoUpload" accept="image/*" multiple onchange="previewPhotos(this)">
+        <div class="photo-previews" id="photoPreviews"></div>
+        <div class="section-label" style="margin-top:18px"><span data-en>Intro Video URL (optional)</span><span data-zh>介绍视频链接（可选）</span></div>
+        <input class="form-input" id="rVideo" placeholder="YouTube or Vimeo link">
+        <p class="form-hint"><span data-en>A 1–2 min intro video significantly boosts bookings.</span><span data-zh>1-2分钟介绍视频可显著提高预约率。</span></p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-view" id="regBackBtn" style="display:none" onclick="regBack()"><span data-en>Back</span><span data-zh>上一步</span></button>
+      <button class="btn-book" id="regNextBtn" onclick="regNext()" style="min-width:110px"><span data-en>Next</span><span data-zh>下一步</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ USER DASHBOARD ════════════ -->
+<div class="overlay" id="dashboardOverlay">
+  <div class="modal wide-modal">
+    <div class="modal-header">
+      <div class="modal-title">📊 <span data-en>My Dashboard</span><span data-zh>我的控制台</span></div>
+      <button class="close-btn" onclick="closeOverlay('dashboardOverlay')">✕</button>
+    </div>
+    <div class="modal-body" id="dashboardBody"></div>
+  </div>
+</div>
+
+<!-- ════════════ AD MANAGER ════════════ -->
+<div class="overlay" id="adManagerOverlay">
+  <div class="modal wide-modal">
+    <div class="modal-header">
+      <div class="modal-title">📢 <span data-en>Advertisement Manager</span><span data-zh>广告管理</span></div>
+      <button class="close-btn" onclick="closeOverlay('adManagerOverlay')">✕</button>
+    </div>
+    <div class="modal-body" id="adManagerBody"></div>
+  </div>
+</div>
+
+<!-- ════════════ TOKEN PURCHASE ════════════ -->
+<div class="overlay" id="tokenOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🪙 <span data-en>Purchase Ad Tokens</span><span data-zh>购买广告积分</span></div>
+      <button class="close-btn" onclick="closeOverlay('tokenOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:18px"><span data-en>1 token = 1 day of featured banner placement on the ZenFlow ad strip.</span><span data-zh>1积分 = 广告栏展示1天。</span></p>
+      <div class="token-packages">
+        <div class="token-pkg" onclick="selectPkg(this,7,9.99)">
+          <div class="token-amount">7</div><div class="token-label">TOKENS</div>
+          <div class="token-price">$9.99</div><div class="token-value">$1.43/token</div>
+        </div>
+        <div class="token-pkg popular" onclick="selectPkg(this,30,29.99)">
+          <div class="token-amount">30</div><div class="token-label">TOKENS</div>
+          <div class="token-price">$29.99</div><div class="token-value">$1.00/token</div>
+        </div>
+        <div class="token-pkg" onclick="selectPkg(this,90,59.99)">
+          <div class="token-amount">90</div><div class="token-label">TOKENS</div>
+          <div class="token-price">$59.99</div><div class="token-value">$0.67/token</div>
+        </div>
+      </div>
+      <div id="selectedPkgInfo" class="notice-box" style="display:none;margin-bottom:16px"></div>
+      <div class="form-group">
+        <label class="form-label"><span data-en>Ad Text</span><span data-zh>广告内容</span></label>
+        <input class="form-input" id="adTextInput" placeholder="🌿 Serene Touch Spa — 20% off first booking! Book at serentouch.com" maxlength="100" oninput="document.getElementById('adCharCount').textContent=this.value.length+'/100'">
+        <div class="char-count" id="adCharCount">0/100</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label"><span data-en>Call-to-Action Label</span><span data-zh>行动按钮文字</span></label>
+        <select class="form-select" id="adCtaInput">
+          <option>Book Now</option><option>Learn More</option><option>Visit</option>
+          <option>Redeem</option><option>Reserve</option><option>Call Us</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-view" onclick="closeOverlay('tokenOverlay')"><span data-en>Cancel</span><span data-zh>取消</span></button>
+      <button class="btn-book" onclick="purchaseTokens()" style="min-width:150px"><span data-en>Purchase & Activate</span><span data-zh>购买并激活</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toastIcon">✓</span><span id="toastMsg">Done!</span></div>
+
+<script>
+
+// ═══════════════════════════════════════════════════════════════
+//  ZenFlow Frontend — API-Connected JavaScript
+//  All localStorage replaced with live API calls to localhost:8000
+// ═══════════════════════════════════════════════════════════════
+
+const API = 'http://localhost:8000';
+
+// ── API helper ────────────────────────────────────────────────
+async function api(method, path, body, auth=true) {
+  const headers = { 'Content-Type': 'application/json' };
+  const token = sessionStorage.getItem('zf_access');
+  if (auth && token) headers['Authorization'] = 'Bearer ' + token;
+  try {
+    const res = await fetch(API + path, {
+      method, headers,
+      body: body ? JSON.stringify(body) : undefined
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw { status: res.status, detail: data.detail || 'Error' };
+    return data;
+  } catch (e) {
+    if (e.status) throw e;
+    throw { status: 0, detail: 'Cannot reach server. Is the API running?' };
+  }
+}
+
+// ── State ─────────────────────────────────────────────────────
+let currentLang = 'en';
+let currentUser = null;           // set after login
+let selectedTalent = null;
+let allAds = [];
+let bookingState = { date:null, time:null, duration:1, contact:'', contactType:'whatsapp', name:'', notes:'' };
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let currentFilter = 'all';
+let currentSearch = '';
+let regStep = 1;
+let blockedDates = [];
+let selectedPkg = null;
+let regAccType = 'customer';
+
+const SKILLS_LIST = ["Swedish Massage","Deep Tissue","Thai Massage","Hot Stone","Aromatherapy","Reflexology","Facial","Prenatal","Lymphatic Drainage","Acupressure"];
+const SKILL_EMOJI = {'Swedish Massage':'🌿','Deep Tissue':'💪','Thai Massage':'🧘','Hot Stone':'🪨','Aromatherapy':'🌸','Reflexology':'🦶','Facial':'✨','Prenatal':'🤱','Lymphatic Drainage':'💧','Acupressure':'🎯'};
+
+// ── Init ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  restoreSession();
+  loadAds();
+  renderTalents();
+  document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key==='Enter') doSearch(); });
+  document.addEventListener('click', e => {
+    if (!document.getElementById('headerUserArea').contains(e.target))
+      document.getElementById('userMenu').classList.remove('show');
+  });
+});
+
+// ── Language ──────────────────────────────────────────────────
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'zh' : 'en';
+  document.body.classList.toggle('zh', currentLang === 'zh');
+  document.getElementById('langBtn').textContent  = currentLang === 'en' ? '中文' : 'EN';
+  document.getElementById('langBtn2').textContent = currentLang === 'en' ? '中文' : 'EN';
+  renderTalents();
+}
+
+// ── Ads ───────────────────────────────────────────────────────
+async function loadAds() {
+  try {
+    allAds = await api('GET', '/ads', null, false);
+    renderAds();
+  } catch(e) {
+    // fallback default ads if API unreachable
+    allAds = [
+      {ad_text:'🌿 ZenFlow — Discover certified wellness professionals near you', cta_label:'Explore'},
+      {ad_text:'💆 Book a massage in minutes — Swedish, Thai, Deep Tissue & more', cta_label:'Book Now'},
+    ];
+    renderAds();
+  }
+}
+
+function renderAds() {
+  const active = allAds.filter(a => a.status === 'active' || a.ad_text);
+  if (!active.length) { document.getElementById('adTrack').innerHTML=''; return; }
+  const doubled = [...active, ...active];
+  document.getElementById('adTrack').innerHTML = doubled.map(a =>
+    `<div class="ad-item"><span class="ad-badge">AD</span><span class="ad-text">${a.ad_text||a.text||''}</span><span class="ad-cta">${a.cta_label||a.cta||'View'} →</span></div>`
+  ).join('');
+}
+
+// ── Talent Grid ───────────────────────────────────────────────
+let _allTalents = [];
+
+async function renderTalents(list) {
+  const grid  = document.getElementById('talentGrid');
+  const empty = document.getElementById('emptyState');
+  const cnt   = document.getElementById('resultsCount');
+
+  if (!list) {
+    // fetch from API on first load
+    try {
+      const params = new URLSearchParams({ sort:'featured', page:1, page_size:20 });
+      if (currentSearch) params.set('q', currentSearch);
+      if (currentFilter === 'available') params.set('available', 'true');
+      else if (currentFilter !== 'all') params.set('skill', currentFilter);
+      const res = await api('GET', '/professionals?' + params, null, false);
+      list = res.data || res;
+      _allTalents = list;
+    } catch(e) {
+      grid.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted)">⚠️ ${e.detail||'Could not load professionals'}</div>`;
+      return;
+    }
+  }
+
+  if (!list.length) { grid.innerHTML=''; empty.style.display='block'; cnt.textContent=''; return; }
+  empty.style.display = 'none';
+  cnt.textContent = `Showing ${list.length} professional${list.length!==1?'s':''}`;
+
+  grid.innerHTML = list.map(t => {
+    const name   = currentLang==='zh' ? (t.display_name_zh||t.display_name) : t.display_name;
+    const title  = currentLang==='zh' ? (t.title_zh||t.title) : t.title;
+    const skills = Array.isArray(t.skills) ? t.skills : (t.skills||'').split(', ').filter(Boolean);
+    const avail  = t.is_available===1||t.is_available===true;
+    return `
+    <div class="talent-card" onclick="openProfile(${t.id})">
+      <div class="card-media">
+        <div class="card-photo">${t.emoji||'🌿'}</div>
+        <div class="card-avail ${avail?'avail-yes':'avail-no'}">${avail?'● Available':'● Booked'}</div>
+        ${t.is_featured?'<div class="card-featured">FEATURED</div>':''}
+        ${t.video_url?'<div class="card-video-badge">▶ Video</div>':''}
+      </div>
+      <div class="card-body">
+        <div class="card-name">${name}</div>
+        <div class="card-title-txt">${title}</div>
+        <div class="card-skills">${skills.map(s=>`<span class="skill-pill">${s}</span>`).join('')}</div>
+        <div class="card-meta">
+          <div>
+            <div class="card-rating">⭐ ${t.rating_avg||'—'} <span style="color:var(--muted);font-weight:400;font-size:11px">(${t.rating_count||0})</span></div>
+            <div class="card-location">📍 ${t.location||'Singapore'}</div>
+          </div>
+          <div class="card-rate">$${t.hourly_rate}<span style="font-size:10px;font-weight:400;color:var(--muted)">/hr</span></div>
+        </div>
+      </div>
+      <div class="card-footer" onclick="event.stopPropagation()">
+        <button class="btn-book" onclick="openBooking(${t.id})">${currentLang==='zh'?'立即预约':'Book Now'}</button>
+        <button class="btn-view" onclick="openProfile(${t.id})">👤</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Search & Filter ───────────────────────────────────────────
+function handleSearch(v) { currentSearch = v; }
+function doSearch() { document.getElementById('searchSugg').classList.remove('show'); renderTalents(); }
+function showSugg()  { document.getElementById('searchSugg').classList.add('show'); }
+function hideSugg()  { setTimeout(() => document.getElementById('searchSugg').classList.remove('show'), 200); }
+function selectSugg(v) { document.getElementById('searchInput').value=v; currentSearch=v; renderTalents(); }
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+
+function filterSkill(skill, el) {
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = skill;
+  renderTalents();
+}
+
+function sortTalents(by) {
+  const map = {featured:'featured',rating:'rating',price_low:'price_asc',price_high:'price_desc'};
+  api('GET', '/professionals?sort='+(map[by]||'featured')+'&page=1&page_size=20', null, false)
+    .then(res => renderTalents(res.data||res))
+    .catch(() => {});
+}
+
+// ── Profile Modal ─────────────────────────────────────────────
+async function openProfile(id) {
+  try {
+    const t = await api('GET', `/professionals/${id}`, null, false);
+    selectedTalent = t;
+    const zh = currentLang==='zh';
+    const name   = zh ? (t.display_name_zh||t.display_name) : t.display_name;
+    const title  = zh ? (t.title_zh||t.title) : t.title;
+    const bio    = zh ? (t.bio_zh||t.bio) : t.bio;
+    const skills = Array.isArray(t.skills) ? t.skills : (t.skills||'').split(', ').filter(Boolean);
+    document.getElementById('profileModalTitle').textContent = name;
+    document.getElementById('profileModalBody').innerHTML = `
+      <div class="profile-header-modal">
+        <div class="profile-avatar">${t.emoji||'🌿'}</div>
+        <div style="flex:1">
+          <div style="font-family:'Lora',serif;font-size:22px;margin-bottom:3px">${name}</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">${title}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">${skills.map(s=>`<span class="skill-pill">${s}</span>`).join('')}</div>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <span style="font-size:13px;font-weight:700">⭐ ${t.rating_avg} <span style="color:var(--muted);font-weight:400">(${t.rating_count} reviews)</span></span>
+            <span style="font-size:12px;color:var(--muted)">📍 ${t.location||''}</span>
+            <span style="font-size:15px;font-weight:800;color:var(--sage-dark)">$${t.hourly_rate}/hr</span>
+          </div>
+        </div>
+      </div>
+      ${t.media&&t.media.length ? `
+      <div class="section-label">${zh?'照片与视频':'Photos & Video'}</div>
+      <div class="media-row">${t.media.map(m=>`<div class="media-thumb" style="background-image:url(${m.url});background-size:cover"></div>`).join('')}</div>` : ''}
+      <div class="section-label">${zh?'关于我':'About'}</div>
+      <p class="about-text">${bio||''}</p>
+      ${t.reviews&&t.reviews.length ? `
+      <div class="section-label">${zh?'评价':'Reviews'}</div>
+      ${t.reviews.slice(0,3).map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--warm-stone)"><div style="font-size:12px;font-weight:700">${'⭐'.repeat(r.rating)} <span style="color:var(--muted);font-weight:400">${r.reviewer}</span></div><div style="font-size:12px;color:#666;margin-top:3px">${r.comment||''}</div></div>`).join('')}` : ''}
+      <div style="margin-top:20px;display:flex;gap:8px">
+        <button class="btn-book" onclick="closeOverlay('profileOverlay');openBooking(${t.id})">${zh?'立即预约':'Book a Session'}</button>
+        <button class="btn-view" onclick="closeOverlay('profileOverlay')">${zh?'返回':'Back'}</button>
+      </div>`;
+    openOverlay('profileOverlay');
+  } catch(e) {
+    showToast('Could not load profile: '+e.detail, '⚠️');
+  }
+}
+
+// ── Booking ───────────────────────────────────────────────────
+async function openBooking(id) {
+  try {
+    const t = await api('GET', `/professionals/${id}`, null, false);
+    selectedTalent = t;
+    bookingState = { date:null, time:null, duration:1, contact:'', contactType:'whatsapp', name:'', notes:'' };
+    calYear = new Date().getFullYear(); calMonth = new Date().getMonth();
+    renderBookingBody();
+    openOverlay('bookingOverlay');
+  } catch(e) {
+    showToast('Could not load professional: '+e.detail,'⚠️');
+  }
+}
+
+function renderBookingBody() {
+  const t = selectedTalent; const zh = currentLang==='zh';
+  const name = zh ? (t.display_name_zh||t.display_name) : t.display_name;
+  document.getElementById('bookingBody').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--parchment);border-radius:10px;margin-bottom:18px">
+      <span style="font-size:28px">${t.emoji||'🌿'}</span>
+      <div><div style="font-weight:700;font-size:15px">${name}</div>
+      <div style="font-size:12px;color:var(--muted)">${zh?(t.title_zh||t.title):t.title} · $${t.hourly_rate}/hr</div></div>
+    </div>
+    <div class="section-label">${zh?'选择日期':'Select Date'}</div>
+    ${buildCalendar()}
+    <div id="timeSection" style="display:none">
+      <div class="section-label">${zh?'选择时段':'Available Times'}</div>
+      <div class="time-slots" id="timeSlots"></div>
+    </div>
+    <div id="durationSection" style="display:none;margin-top:14px">
+      <div class="section-label">${zh?'时长':'Duration'}</div>
+      <div class="duration-selector">
+        <div class="duration-btn active" onclick="setDur(1,this)">1 ${zh?'小时':'hr'}</div>
+        <div class="duration-btn" onclick="setDur(2,this)">2 ${zh?'小时':'hr'}</div>
+        <div class="duration-btn" onclick="setDur(3,this)">3 ${zh?'小时':'hr'}</div>
+      </div>
+    </div>
+    <div id="contactSection" style="display:none;margin-top:14px">
+      <div class="section-label">${zh?'您的联系方式（无需登录）':'Your Contact — No Login Required'}</div>
+      <div class="form-group"><label class="form-label">${zh?'您的姓名':'Your Name'}</label>
+        <input class="form-input" id="bkName" placeholder="John Tan" value="${currentUser?(currentUser.first_name+' '+(currentUser.last_name||'')).trim():''}"></div>
+      <div class="contact-type-row">
+        <button class="contact-type-btn active" id="bkWA" onclick="setBkContact('whatsapp')">💬 WhatsApp</button>
+        <button class="contact-type-btn" id="bkWC" onclick="setBkContact('wechat')">🟢 WeChat</button>
+      </div>
+      <div class="form-group"><label class="form-label" id="bkContactLabel">${zh?'WhatsApp 号码':'WhatsApp Number'}</label>
+        <input class="form-input" id="bkContact" placeholder="+65 9123 4567"></div>
+      <div class="form-group"><label class="form-label">${zh?'备注（可选）':'Notes (optional)'}</label>
+        <textarea class="form-textarea" id="bkNotes" rows="2" placeholder="${zh?'如有特殊需求请注明…':'Any special requests or health notes…'}"></textarea></div>
+      <div class="summary-box">
+        <div class="summary-row"><span>${zh?'治疗师':'Therapist'}</span><span>${t.emoji||'🌿'} ${name}</span></div>
+        <div class="summary-row"><span>${zh?'时长':'Duration'}</span><span id="sDur">1 hr</span></div>
+        <div class="summary-row"><span>${zh?'日期时间':'Date & Time'}</span><span id="sDT">—</span></div>
+        <div class="summary-total"><span>${zh?'合计':'Total'}</span><span id="sTotal" style="color:var(--sage-dark)">$${t.hourly_rate}</span></div>
+      </div>
+      <button class="btn-book" style="width:100%;margin-top:14px;padding:13px;font-size:14px" onclick="confirmBooking()">${zh?'确认预约':'Confirm Booking'}</button>
+    </div>`;
+}
+
+function buildCalendar() {
+  const ms=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now=new Date();
+  const first=new Date(calYear,calMonth,1).getDay();
+  const days=new Date(calYear,calMonth+1,0).getDate();
+  let h=`<div class="cal-month"><button class="cal-nav" onclick="navCal(-1)">‹</button><span class="cal-month-name">${ms[calMonth]} ${calYear}</span><button class="cal-nav" onclick="navCal(1)">›</button></div>`;
+  h+='<div class="calendar-grid">';
+  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d=>h+=`<div class="cal-day-label">${d}</div>`);
+  for(let i=0;i<first;i++) h+='<div class="cal-day empty"></div>';
+  const today=now.getDate(),todayM=now.getMonth(),todayY=now.getFullYear();
+  for(let d=1;d<=days;d++){
+    const past=(calYear<todayY)||(calYear===todayY&&calMonth<todayM)||(calYear===todayY&&calMonth===todayM&&d<today);
+    const isToday=d===today&&calMonth===todayM&&calYear===todayY;
+    const hasSlots=!past;
+    const dateStr=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const sel=bookingState.date===dateStr;
+    h+=`<div class="cal-day${past?' past':''}${isToday?' today':''}${hasSlots&&!past?' has-slots':''}${sel?' selected':''}"${!past?` onclick="selectDate('${dateStr}',this)"`:''} >${d}</div>`;
+  }
+  return h+'</div>';
+}
+
+function navCal(dir) {
+  calMonth+=dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  renderBookingBody();
+}
+
+function selectDate(dateStr, el) {
+  bookingState.date = dateStr;
+  renderBookingBody();
+  document.getElementById('timeSection').style.display = 'block';
+  const times=['9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM','8:00 PM'];
+  document.getElementById('timeSlots').innerHTML = times.map(t =>
+    `<div class="time-slot available" onclick="selectTime('${t}',this)">${t}</div>`
+  ).join('');
+}
+
+function selectTime(t, el) {
+  document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  bookingState.time = t;
+  document.getElementById('durationSection').style.display = 'block';
+  document.getElementById('contactSection').style.display = 'block';
+  updateSummary();
+}
+
+function setDur(h, el) {
+  document.querySelectorAll('.duration-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); bookingState.duration=h; updateSummary();
+}
+
+function setBkContact(type) {
+  bookingState.contactType=type;
+  document.getElementById('bkWA').classList.toggle('active',type==='whatsapp');
+  document.getElementById('bkWC').classList.toggle('active',type==='wechat');
+  document.getElementById('bkContactLabel').textContent=type==='whatsapp'?'WhatsApp Number':'WeChat ID';
+  document.getElementById('bkContact').placeholder=type==='whatsapp'?'+65 9123 4567':'WeChat ID';
+}
+
+function updateSummary() {
+  const dur=bookingState.duration;
+  document.getElementById('sDur').textContent=dur+' hr'+(dur>1?'s':'');
+  document.getElementById('sDT').textContent=bookingState.date&&bookingState.time?bookingState.date+' at '+bookingState.time:'—';
+  document.getElementById('sTotal').textContent='$'+(selectedTalent.hourly_rate*dur);
+}
+
+async function confirmBooking() {
+  const contact=document.getElementById('bkContact')?.value.trim();
+  const name=document.getElementById('bkName')?.value.trim();
+  if(!bookingState.date||!bookingState.time){showToast('Please select a date and time','⚠️');return;}
+  if(!name||!contact){showToast('Please enter your name and contact','⚠️');return;}
+  try {
+    const b = await api('POST', '/bookings', {
+      professional_id: selectedTalent.id,
+      customer_name:   name,
+      contact_type:    bookingState.contactType,
+      contact_value:   contact,
+      booking_date:    bookingState.date,
+      booking_time:    bookingState.time,
+      duration_hours:  bookingState.duration,
+      notes:           document.getElementById('bkNotes')?.value||''
+    }, false);
+    closeOverlay('bookingOverlay');
+    showConfirm(b);
+  } catch(e) {
+    showToast(e.detail||'Booking failed','⚠️');
+  }
+}
+
+function showConfirm(b) {
+  const zh=currentLang==='zh';
+  const profName = zh ? (b.professional_name_zh||b.professional_name) : b.professional_name;
+  document.getElementById('confirmBody').innerHTML=`
+    <div class="confirm-box">
+      <div style="font-size:44px;margin-bottom:6px">✅</div>
+      <div style="font-size:13px;opacity:.6;margin-bottom:3px">${zh?'您的预约编号':'Your Booking ID'}</div>
+      <div class="booking-id">${b.booking_ref}</div>
+      <div style="font-size:11px;opacity:.4;margin-bottom:14px">${zh?'请保存此编号':'Save this ID to manage your booking'}</div>
+      <div class="confirm-detail">${zh?'治疗师':'Therapist'}: <strong>${b.professional_emoji||'🌿'} ${profName}</strong></div>
+      <div class="confirm-detail">${zh?'日期':'Date'}: <strong>${b.booking_date}</strong></div>
+      <div class="confirm-detail">${zh?'时间':'Time'}: <strong>${b.booking_time}</strong></div>
+      <div class="confirm-detail">${zh?'时长':'Duration'}: <strong>${b.duration_hours} hr${b.duration_hours>1?'s':''}</strong></div>
+      <div class="confirm-detail">${zh?'合计':'Total'}: <strong>$${b.total_amount}</strong></div>
+    </div>
+    <div class="notice-box">
+      ${b.contact_type==='whatsapp'?'💬':'🟢'} ${zh?`确认已发送至 ${b.contact_type==='whatsapp'?'WhatsApp':'微信'}：<strong>${b.contact_value}</strong>`:`Confirmation sent to your ${b.contact_type==='whatsapp'?'WhatsApp':'WeChat'}: <strong>${b.contact_value}</strong>`}
+      <br><br>🔑 ${zh?'通过顶部"我的预约"输入编号':'Use "My Booking" in the header with ID'} <span style="font-family:'DM Mono',monospace;color:var(--sage-dark);font-weight:700">${b.booking_ref}</span>
+    </div>`;
+  openOverlay('confirmOverlay');
+}
+
+// ── Manage Booking ────────────────────────────────────────────
+function openManageModal() {
+  document.getElementById('lookupId').value='';
+  document.getElementById('bookingDetails').innerHTML='';
+  openOverlay('manageOverlay');
+}
+
+async function lookupBooking() {
+  const ref=document.getElementById('lookupId').value.trim().toUpperCase();
+  const zh=currentLang==='zh';
+  const c=document.getElementById('bookingDetails');
+  if(!ref){showToast('Please enter a booking ID','⚠️');return;}
+  c.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)">🔍 Looking up…</div>';
+  try {
+    const b = await api('GET', `/bookings/${ref}`, null, false);
+    const isCancelled=b.status==='cancelled';
+    const profName=zh?(b.professional_name_zh||b.professional_name):b.professional_name;
+    c.innerHTML=`
+      <div class="confirm-box" style="margin-bottom:14px">
+        <span class="manage-status-badge ${!isCancelled?'status-confirmed':'status-cancelled'}">${b.status.toUpperCase()}</span>
+        <div class="booking-id">${b.booking_ref}</div>
+        <div class="confirm-detail">${zh?'客户':'Customer'}: <strong>${b.customer_name}</strong></div>
+        <div class="confirm-detail">${zh?'治疗师':'Therapist'}: <strong>${b.professional_emoji||'🌿'} ${profName}</strong></div>
+        <div class="confirm-detail">${zh?'日期':'Date'}: <strong>${b.booking_date}</strong></div>
+        <div class="confirm-detail">${zh?'时间':'Time'}: <strong>${b.booking_time}</strong></div>
+        <div class="confirm-detail">${zh?'时长':'Duration'}: <strong>${b.duration_hours} hr${b.duration_hours>1?'s':''}</strong></div>
+        <div class="confirm-detail">${zh?'合计':'Total'}: <strong>$${b.total_amount}</strong></div>
+        <div class="confirm-detail">${zh?'联系方式':'Contact'}: <strong>${b.contact_type==='whatsapp'?'💬':'🟢'} ${b.contact_value}</strong></div>
+        ${b.notes?`<div class="confirm-detail">${zh?'备注':'Notes'}: <em style="color:rgba(255,255,255,.65)">${b.notes}</em></div>`:''}
+      </div>
+      ${!isCancelled?`
+      <div style="border:1.5px solid var(--warm-stone);border-radius:12px;overflow:hidden;margin-bottom:10px">
+        <div style="padding:11px 14px;background:var(--parchment);font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;cursor:pointer;display:flex;justify-content:space-between" onclick="toggleSection('editContactSection')">
+          <span>✏️ ${zh?'修改联系方式 / 备注':'Edit Contact & Notes'}</span><span id="editContactChevron">▼</span>
+        </div>
+        <div id="editContactSection" style="display:none;padding:14px">
+          <div class="form-group"><label class="form-label">${zh?'姓名':'Name'}</label>
+            <input class="form-input" id="editName" value="${b.customer_name}" style="font-size:13px"></div>
+          <div style="display:flex;gap:7px;margin-bottom:8px">
+            <button class="contact-type-btn ${b.contact_type==='whatsapp'?'active':''}" id="editWA" onclick="setEditContact('whatsapp')">💬 WhatsApp</button>
+            <button class="contact-type-btn ${b.contact_type==='wechat'?'active':''}" id="editWC" onclick="setEditContact('wechat')">🟢 WeChat</button>
+          </div>
+          <div class="form-group"><label class="form-label" id="editContactLabel">${b.contact_type==='whatsapp'?'WhatsApp Number':'WeChat ID'}</label>
+            <input class="form-input" id="editContact" value="${b.contact_value}" style="font-size:13px"></div>
+          <div class="form-group"><label class="form-label">${zh?'备注':'Notes'}</label>
+            <textarea class="form-textarea" id="editNotes" rows="2" style="font-size:13px">${b.notes||''}</textarea></div>
+          <button class="btn-book" onclick="saveContactEdit('${ref}')" style="width:100%;padding:10px">${zh?'保存修改':'Save Changes'}</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-view" style="flex:1" onclick="rescheduleBooking('${ref}','${b.professional_id}')">${zh?'修改时间':'Reschedule'}</button>
+        <button class="btn-book" style="flex:1;background:var(--terracotta)" onclick="cancelBooking('${ref}')">${zh?'取消预约':'Cancel Booking'}</button>
+      </div>`
+      :`<p style="text-align:center;color:var(--muted);font-size:13px;padding:10px">${zh?'此预约已取消。':'This booking has been cancelled.'}</p>`}`;
+    window._editContactType = b.contact_type;
+  } catch(e) {
+    c.innerHTML=`<div style="text-align:center;padding:20px;color:var(--terracotta)">❌ ${e.status===404?(zh?'未找到预约，请确认编号。':'Booking not found. Check your ID.'):e.detail}</div>`;
+  }
+}
+
+function toggleSection(id){
+  const el=document.getElementById(id);
+  const open=el.style.display!=='none';
+  el.style.display=open?'none':'block';
+  const map={'editContactSection':'editContactChevron'};
+  const ch=document.getElementById(map[id]);
+  if(ch)ch.textContent=open?'▼':'▲';
+}
+
+function setEditContact(type){
+  window._editContactType=type;
+  document.getElementById('editWA').classList.toggle('active',type==='whatsapp');
+  document.getElementById('editWC').classList.toggle('active',type==='wechat');
+  document.getElementById('editContactLabel').textContent=type==='whatsapp'?'WhatsApp Number':'WeChat ID';
+}
+
+async function saveContactEdit(ref) {
+  const name=document.getElementById('editName').value.trim();
+  const contact=document.getElementById('editContact').value.trim();
+  const notes=document.getElementById('editNotes').value.trim();
+  if(!name||!contact){showToast('Name and contact are required','⚠️');return;}
+  try {
+    await api('PATCH',`/bookings/${ref}`,{customer_name:name,contact_type:window._editContactType,contact_value:contact,notes},false);
+    showToast('Booking updated ✓','✓');
+    lookupBooking();
+  } catch(e){ showToast(e.detail||'Update failed','⚠️'); }
+}
+
+async function cancelBooking(ref) {
+  if(!confirm('Cancel this booking? This cannot be undone.'))return;
+  try {
+    await api('DELETE',`/bookings/${ref}`,null,false);
+    showToast('Booking cancelled','✓');
+    lookupBooking();
+    if(document.getElementById('dashboardOverlay').classList.contains('show')) openDashboard();
+  } catch(e){ showToast(e.detail||'Cancellation failed','⚠️'); }
+}
+
+async function rescheduleBooking(ref, profId) {
+  closeOverlay('manageOverlay');
+  await openBooking(parseInt(profId));
+  showToast('Select a new date and time','ℹ️');
+}
+
+// ── Auth ──────────────────────────────────────────────────────
+let _authMode='login';
+function openAuthModal(mode){
+  _authMode=mode||'login';
+  switchAuthTab(_authMode);
+  openOverlay('authOverlay');
+}
+function switchAuthTab(tab){
+  _authMode=tab;
+  document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
+  document.getElementById('registerAuthForm').style.display=tab==='register'?'block':'none';
+  document.getElementById('tabLogin').classList.toggle('active',tab==='login');
+  document.getElementById('tabRegister').classList.toggle('active',tab==='register');
+}
+function setAccType(t){
+  regAccType=t;
+  document.getElementById('typeCustomer').classList.toggle('active',t==='customer');
+  document.getElementById('typePro').classList.toggle('active',t==='professional');
+}
+
+async function doLogin() {
+  const email=document.getElementById('loginEmail').value.trim().toLowerCase();
+  const pwd=document.getElementById('loginPwd').value;
+  const errEl=document.getElementById('loginError');
+  errEl.style.display='none';
+  if(!email||!pwd){errEl.textContent='Please fill in all fields.';errEl.style.display='block';return;}
+  try {
+    const res=await api('POST','/auth/login',{email,password:pwd},false);
+    sessionStorage.setItem('zf_access', res.access_token);
+    sessionStorage.setItem('zf_refresh', res.refresh_token);
+    currentUser=res.user;
+    closeOverlay('authOverlay');
+    updateHeaderUI();
+    showToast('Welcome back, '+currentUser.first_name+'! 👋','✓');
+  } catch(e){
+    errEl.textContent=e.status===401?'Invalid email or password.':(e.detail||'Login failed');
+    errEl.style.display='block';
+  }
+}
+
+async function doRegister() {
+  const fn=document.getElementById('regFirstName').value.trim();
+  const ln=document.getElementById('regLastName').value.trim();
+  const email=document.getElementById('regEmail').value.trim().toLowerCase();
+  const pwd=document.getElementById('regPwd').value;
+  const pwd2=document.getElementById('regPwd2').value;
+  const errEl=document.getElementById('regError');
+  errEl.style.display='none';
+  if(!fn||!ln||!email||!pwd){errEl.textContent='Please fill in all fields.';errEl.style.display='block';return;}
+  if(pwd!==pwd2){errEl.textContent='Passwords do not match.';errEl.style.display='block';return;}
+  try {
+    const res=await api('POST','/auth/register',{email,first_name:fn,last_name:ln,password:pwd,account_type:regAccType},false);
+    sessionStorage.setItem('zf_access', res.access_token);
+    sessionStorage.setItem('zf_refresh', res.refresh_token);
+    currentUser=res.user;
+    closeOverlay('authOverlay');
+    updateHeaderUI();
+    showToast('Account created! Welcome, '+fn+' 🎉','✓');
+    if(regAccType==='professional') setTimeout(()=>openRegisterModal(),600);
+  } catch(e){
+    errEl.textContent=e.detail||'Registration failed';
+    errEl.style.display='block';
+  }
+}
+
+async function socialLogin(provider) {
+  try {
+    const email='demo.'+provider.toLowerCase()+'@zenflow.app';
+    const res=await api('POST','/auth/social',{provider,provider_id:'demo',email,first_name:provider,last_name:'Demo'},false);
+    sessionStorage.setItem('zf_access', res.access_token);
+    sessionStorage.setItem('zf_refresh', res.refresh_token);
+    currentUser=res.user;
+    closeOverlay('authOverlay');
+    updateHeaderUI();
+    showToast('Signed in with '+provider+' 🎉','✓');
+  } catch(e){ showToast(e.detail||'Social login failed','⚠️'); }
+}
+
+function logoutUser(){
+  currentUser=null;
+  sessionStorage.removeItem('zf_access');
+  sessionStorage.removeItem('zf_refresh');
+  updateHeaderUI();
+  closeUserMenu();
+  showToast('Signed out','✓');
+}
+
+function restoreSession(){
+  const token=sessionStorage.getItem('zf_access');
+  if(!token) return;
+  api('GET','/auth/me').then(user=>{
+    currentUser=user;
+    updateHeaderUI();
+  }).catch(()=>{
+    sessionStorage.removeItem('zf_access');
+    sessionStorage.removeItem('zf_refresh');
+  });
+}
+
+function updateHeaderUI(){
+  const loggedIn=!!currentUser;
+  document.getElementById('loginHeaderBtn').style.display=loggedIn?'none':'block';
+  document.getElementById('userAvatarWrap').style.display=loggedIn?'block':'none';
+  document.getElementById('langBtn').style.display=loggedIn?'none':'block';
+  document.getElementById('langBtn2').style.display=loggedIn?'block':'none';
+  if(loggedIn){
+    const init=((currentUser.first_name||'')[0]+(currentUser.last_name||'')[0]||'').toUpperCase();
+    document.getElementById('userAvatarBtn').textContent=init||'👤';
+    document.getElementById('menuName').textContent=(currentUser.first_name||'')+' '+(currentUser.last_name||'');
+    document.getElementById('menuEmail').textContent=currentUser.email||'';
+    document.getElementById('tokenBadge').style.display='flex';
+    document.getElementById('tokenCount').textContent=currentUser.token_balance||0;
+  } else {
+    document.getElementById('tokenBadge').style.display='none';
+  }
+}
+function toggleUserMenu(){ document.getElementById('userMenu').classList.toggle('show'); }
+function closeUserMenu(){ document.getElementById('userMenu').classList.remove('show'); }
+
+// ── Dashboard ─────────────────────────────────────────────────
+async function openDashboard(){
+  closeUserMenu();
+  if(!currentUser){openAuthModal('login');return;}
+  const zh=currentLang==='zh';
+  document.getElementById('dashboardBody').innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">⏳ Loading…</div>';
+  openOverlay('dashboardOverlay');
+  try {
+    const [meRes,bkRes,adRes] = await Promise.all([
+      api('GET','/auth/me'),
+      api('GET','/users/me/bookings?page=1&page_size=20'),
+      api('GET','/users/me/ads'),
+    ]);
+    currentUser=meRes;
+    updateHeaderUI();
+    const bookings=(bkRes.data||bkRes)||[];
+    const ads=adRes||[];
+    const confirmed=bookings.filter(b=>b.status==='confirmed');
+    const spend=confirmed.reduce((s,b)=>s+(b.total_amount||0),0);
+    document.getElementById('dashboardBody').innerHTML=`
+      <div class="dash-grid">
+        <div class="dash-card"><div class="dash-num">${bookings.length}</div><div class="dash-label">${zh?'总预约次数':'Total Bookings'}</div></div>
+        <div class="dash-card"><div class="dash-num">$${spend.toFixed(0)}</div><div class="dash-label">${zh?'总消费':'Total Spent'}</div></div>
+        <div class="dash-card"><div class="dash-num">${meRes.token_balance||0} 🪙</div><div class="dash-label">${zh?'广告积分':'Ad Tokens'}</div></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">${zh?'我的预约':'My Bookings'}</div>
+      ${!bookings.length?`<p style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center">${zh?'暂无预约记录':'No bookings yet'}</p>`:
+        bookings.map(b=>`
+        <div class="dash-booking-row">
+          <span style="font-size:24px">${b.professional_emoji||'🌿'}</span>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:13px">${zh?(b.professional_name_zh||b.professional_name):b.professional_name}</div>
+            <div style="font-size:11px;color:var(--muted)">${b.booking_date} · ${b.booking_time} · ${b.duration_hours}hr</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700;font-size:13px;color:var(--sage-dark)">$${b.total_amount}</div>
+            <span class="manage-status-badge ${b.status==='confirmed'?'status-confirmed':'status-cancelled'}" style="margin:0;font-size:10px">${b.status}</span>
+          </div>
+          <div style="display:flex;gap:5px;margin-left:8px">
+            ${b.status==='confirmed'?`<button class="icon-btn danger" onclick="cancelBooking('${b.booking_ref}');openDashboard()" title="Cancel">✕</button>`:''}
+            <button class="icon-btn" onclick="prefillLookup('${b.booking_ref}')" title="View">🔍</button>
+          </div>
+        </div>`).join('')}
+      ${ads.length?`
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin:20px 0 10px">${zh?'我的广告':'My Ads'}</div>
+      ${ads.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--warm-stone);font-size:12px">
+        <span class="ad-status-pill ${a.status==='active'?'ad-active':a.status==='paused'?'ad-paused':'ad-inactive'}">${a.status.toUpperCase()}</span>
+        <span style="flex:1;color:var(--muted)">${a.ad_text}</span>
+        <span style="color:var(--sage);font-size:11px">${a.days_left}d left</span>
+        <button class="icon-btn" onclick="openAdManager()">✏️</button></div>`).join('')}`:''
+      }`;
+  } catch(e){
+    document.getElementById('dashboardBody').innerHTML=`<div style="text-align:center;padding:40px;color:var(--terracotta)">⚠️ ${e.detail||'Failed to load dashboard'}</div>`;
+  }
+}
+
+function prefillLookup(ref){
+  closeOverlay('dashboardOverlay');
+  document.getElementById('lookupId').value=ref;
+  openOverlay('manageOverlay');
+  setTimeout(()=>lookupBooking(),100);
+}
+
+// ── Ad Manager ────────────────────────────────────────────────
+async function openAdManager(){
+  closeUserMenu();
+  if(!currentUser){openAuthModal('login');return;}
+  document.getElementById('adManagerBody').innerHTML='<div style="text-align:center;padding:30px;color:var(--muted)">⏳ Loading…</div>';
+  openOverlay('adManagerOverlay');
+  await renderAdManager();
+}
+
+async function renderAdManager(){
+  if(!currentUser) return;
+  const zh=currentLang==='zh';
+  try {
+    const [meRes,ads] = await Promise.all([api('GET','/auth/me'), api('GET','/users/me/ads')]);
+    currentUser=meRes; updateHeaderUI();
+    document.getElementById('adManagerBody').innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:13px;color:var(--muted)">${zh?'可用积分':'Available Tokens'}</div>
+          <div style="font-size:22px;font-weight:700;color:var(--gold)">🪙 ${meRes.token_balance||0}</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-view" onclick="closeOverlay('adManagerOverlay');openTokenModal()">${zh?'+ 购买积分':'+ Buy Tokens'}</button>
+          <button class="btn-book" onclick="showNewAdForm()">${zh?'+ 新建广告':'+ New Ad'}</button>
+        </div>
+      </div>
+      <div id="newAdFormArea"></div>
+      ${!ads.length?`<div class="empty-state" style="padding:40px 0"><div class="empty-icon">📢</div><div class="empty-title" style="font-size:18px">${zh?'暂无广告':'No ads yet'}</div></div>`:
+      `<table class="ad-table"><thead><tr>
+        <th>${zh?'广告内容':'Ad Content'}</th><th>${zh?'状态':'Status'}</th>
+        <th>${zh?'剩余天数':'Days Left'}</th><th>${zh?'操作':'Actions'}</th>
+      </tr></thead><tbody>
+      ${ads.map(a=>`<tr>
+        <td style="max-width:220px">
+          <div style="font-size:12px;color:var(--deep-clay);margin-bottom:3px;word-break:break-word">${a.ad_text}</div>
+          <span style="font-size:10px;color:var(--muted)">${a.cta_label} →</span>
+          <div class="ad-edit-row" id="editRow_${a.id}">
+            <div class="ad-preview-strip"><span class="ad-badge">AD</span>
+              <span class="ad-text" id="prevTxt_${a.id}">${a.ad_text}</span>
+              <span class="ad-cta" id="prevCta_${a.id}">${a.cta_label} →</span></div>
+            <input class="form-input" id="editText_${a.id}" value="${(a.ad_text||'').replace(/"/g,'&quot;')}" maxlength="100" style="margin-bottom:6px;font-size:12px"
+              oninput="document.getElementById('editCC_${a.id}').textContent=this.value.length+'/100';document.getElementById('prevTxt_${a.id}').textContent=this.value">
+            <div class="char-count" id="editCC_${a.id}">${(a.ad_text||'').length}/100</div>
+            <select class="form-select" id="editCta_${a.id}" style="margin-top:6px;font-size:12px"
+              onchange="document.getElementById('prevCta_${a.id}').textContent=this.value+' →'">
+              ${['Book Now','Learn More','Visit','Redeem','Reserve','Call Us'].map(o=>`<option${o===a.cta_label?' selected':''}>${o}</option>`).join('')}
+            </select>
+            <div style="display:flex;gap:6px;margin-top:8px">
+              <button class="btn-book" style="flex:1;padding:7px;font-size:11px" onclick="saveAdEdit(${a.id})">${zh?'保存':'Save'}</button>
+              <button class="btn-view" style="font-size:11px;padding:7px 10px" onclick="toggleEditRow(${a.id})">${zh?'取消':'Cancel'}</button>
+            </div>
+          </div>
+        </td>
+        <td><span class="ad-status-pill ${a.status==='active'?'ad-active':a.status==='paused'?'ad-paused':'ad-inactive'}">${a.status.toUpperCase()}</span></td>
+        <td style="font-weight:700;color:var(--sage-dark)">${a.days_left}</td>
+        <td><div style="display:flex;gap:5px;flex-wrap:wrap">
+          <button class="icon-btn" onclick="toggleEditRow(${a.id})" title="Edit">✏️</button>
+          <button class="icon-btn" onclick="toggleAdStatus(${a.id})" title="${a.status==='paused'?'Resume':'Pause'}">${a.status==='paused'?'▶':'⏸'}</button>
+          <button class="icon-btn danger" onclick="deleteAd(${a.id})" title="Delete">🗑</button>
+        </div></td>
+      </tr>`).join('')}
+      </tbody></table>`}`;
+  } catch(e){
+    document.getElementById('adManagerBody').innerHTML=`<div style="text-align:center;padding:30px;color:var(--terracotta)">⚠️ ${e.detail||'Failed to load ads'}</div>`;
+  }
+}
+
+function toggleEditRow(id){
+  const row=document.getElementById('editRow_'+id);
+  if(row) row.classList.toggle('open');
+}
+
+async function saveAdEdit(id){
+  const text=document.getElementById('editText_'+id)?.value.trim();
+  const cta=document.getElementById('editCta_'+id)?.value;
+  if(!text){showToast('Ad text cannot be empty','⚠️');return;}
+  try {
+    await api('PATCH',`/ads/${id}`,{ad_text:text,cta_label:cta});
+    await loadAds();
+    await renderAdManager();
+    showToast('Ad updated ✓','✓');
+  } catch(e){ showToast(e.detail||'Update failed','⚠️'); }
+}
+
+async function toggleAdStatus(id){
+  try {
+    const ads=await api('GET','/users/me/ads');
+    const ad=ads.find(a=>a.id===id);
+    if(!ad) return;
+    const newStatus=ad.status==='paused'?'active':'paused';
+    await api('PATCH',`/ads/${id}`,{status:newStatus});
+    await loadAds();
+    await renderAdManager();
+    showToast(newStatus==='active'?'Ad resumed ▶':'Ad paused ⏸','✓');
+  } catch(e){ showToast(e.detail||'Failed','⚠️'); }
+}
+
+async function deleteAd(id){
+  if(!confirm('Delete this ad permanently?'))return;
+  try {
+    await api('DELETE',`/ads/${id}`);
+    await loadAds();
+    await renderAdManager();
+    showToast('Ad deleted','✓');
+  } catch(e){ showToast(e.detail||'Delete failed','⚠️'); }
+}
+
+function showNewAdForm(){
+  const zh=currentLang==='zh';
+  const area=document.getElementById('newAdFormArea');
+  if(area.innerHTML){area.innerHTML='';return;}
+  area.innerHTML=`
+    <div style="background:var(--parchment);border-radius:12px;padding:16px;margin-bottom:18px;border:1.5px solid var(--warm-stone)">
+      <div style="font-weight:700;font-size:13px;margin-bottom:12px">📢 ${zh?'创建新广告':'Create New Ad'}</div>
+      <div class="form-group">
+        <label class="form-label">${zh?'广告内容':'Ad Text'} <span style="color:var(--muted);font-weight:400">(max 100 chars)</span></label>
+        <input class="form-input" id="newAdText" maxlength="100" placeholder="🌿 Your Spa Name — Special offer! website.com"
+          oninput="document.getElementById('newAdCC').textContent=this.value.length+'/100'" style="font-size:13px">
+        <div class="char-count" id="newAdCC">0/100</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">${zh?'行动按钮':'Call-to-Action'}</label>
+        <select class="form-select" id="newAdCta" style="font-size:13px">
+          ${['Book Now','Learn More','Visit','Redeem','Reserve','Call Us'].map(o=>`<option>${o}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">${zh?'运行天数 (1积分=1天)':'Days to Run (1 token = 1 day)'}</label>
+        <input class="form-input" type="number" id="newAdDays" min="1" placeholder="7" style="font-size:13px">
+        <div class="form-hint">${zh?'当前余额：':'Balance:'} <strong>${currentUser?.token_balance||0}</strong> tokens</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-book" onclick="createNewAd()" style="flex:1">${zh?'创建并激活':'Create & Activate'}</button>
+        <button class="btn-view" onclick="document.getElementById('newAdFormArea').innerHTML=''">${zh?'取消':'Cancel'}</button>
+      </div>
+    </div>`;
+}
+
+async function createNewAd(){
+  const text=document.getElementById('newAdText')?.value.trim();
+  const cta=document.getElementById('newAdCta')?.value;
+  const days=parseInt(document.getElementById('newAdDays')?.value)||0;
+  if(!text){showToast('Please enter ad text','⚠️');return;}
+  if(days<1){showToast('Please enter number of days','⚠️');return;}
+  try {
+    await api('POST','/ads',{ad_text:text,cta_label:cta,days});
+    await loadAds();
+    const meRes=await api('GET','/auth/me');
+    currentUser=meRes; updateHeaderUI();
+    await renderAdManager();
+    showToast('Ad created & live! 🎉','✓');
+  } catch(e){ showToast(e.detail||'Create failed','⚠️'); }
+}
+
+// ── Tokens / Payments ─────────────────────────────────────────
+function openTokenModal(){
+  closeUserMenu();
+  if(!currentUser){openAuthModal('login');showToast('Please sign in to purchase tokens','ℹ️');return;}
+  openOverlay('tokenOverlay');
+}
+function selectPkg(el,amount,price){
+  document.querySelectorAll('.token-pkg').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected'); selectedPkg={amount,price};
+  const info=document.getElementById('selectedPkgInfo');
+  info.style.display='block';
+  info.textContent=`Selected: ${amount} tokens for $${price} — ${amount} days of banner ad placement.`;
+}
+async function purchaseTokens(){
+  if(!selectedPkg){showToast('Please select a package','⚠️');return;}
+  const text=document.getElementById('adTextInput').value.trim();
+  const cta=document.getElementById('adCtaInput').value;
+  if(!text){showToast('Please enter your ad text first','⚠️');return;}
+  const pkgMap={7:'7',30:'30',90:'90'};
+  const pkg=pkgMap[selectedPkg.amount];
+  try {
+    const res=await api('POST','/payments/tokens',{package:pkg,ad_text:text,cta_label:cta});
+    const meRes=await api('GET','/auth/me');
+    currentUser=meRes; updateHeaderUI();
+    await loadAds();
+    closeOverlay('tokenOverlay');
+    selectedPkg=null;
+    document.querySelectorAll('.token-pkg').forEach(p=>p.classList.remove('selected'));
+    document.getElementById('adTextInput').value='';
+    document.getElementById('adCharCount').textContent='0/100';
+    document.getElementById('selectedPkgInfo').style.display='none';
+    showToast(`${res.tokens_added} day ad is now LIVE! 🎉','🪙`);
+  } catch(e){ showToast(e.detail||'Purchase failed','⚠️'); }
+}
+
+// ── Professional Registration (4-step) ────────────────────────
+function openRegisterOrListModal(){
+  if(!currentUser){openAuthModal('register');return;}
+  openRegisterModal();
+}
+function openRegisterModal(){
+  regStep=1; blockedDates=[];
+  document.getElementById('skillCheckGrid').innerHTML=SKILLS_LIST.map(s=>
+    `<div class="skill-check" onclick="this.classList.toggle('checked')"><span style="font-size:15px">${SKILL_EMOJI[s]}</span> ${s}</div>`
+  ).join('');
+  updateRegSteps();
+  openOverlay('registerOverlay');
+}
+function regNext(){ if(regStep===4){submitReg();return;} regStep++; updateRegSteps(); }
+function regBack(){ if(regStep>1){regStep--;updateRegSteps();} }
+function updateRegSteps(){
+  [1,2,3,4].forEach(s=>{
+    document.getElementById('regStep'+s).style.display=s===regStep?'block':'none';
+    const el=document.querySelector('[data-step="'+s+'"]');
+    el.classList.toggle('active',s===regStep); el.classList.toggle('done',s<regStep);
+  });
+  document.getElementById('regBackBtn').style.display=regStep>1?'block':'none';
+  document.getElementById('regNextBtn').textContent=regStep===4?(currentLang==='zh'?'提交入驻':'Submit Profile'):(currentLang==='zh'?'下一步':'Next →');
+}
+function toggleDay(el){ el.classList.toggle('active'); }
+function addBlockDate(){
+  const v=document.getElementById('rBlockDate').value;
+  if(!v||blockedDates.includes(v))return;
+  blockedDates.push(v);
+  document.getElementById('blockedDates').innerHTML=blockedDates.map(d=>
+    `<span style="background:rgba(196,113,74,.1);color:var(--terracotta);border:1px solid rgba(196,113,74,.2);padding:3px 10px;border-radius:8px;font-size:11px;cursor:pointer" onclick="removeBlock('${d}')">${d} ✕</span>`
+  ).join('');
+}
+function removeBlock(d){ blockedDates=blockedDates.filter(x=>x!==d); addBlockDate(); }
+function previewPhotos(input){
+  const p=document.getElementById('photoPreviews'); p.innerHTML='';
+  [...input.files].slice(0,6).forEach(f=>{
+    const el=document.createElement('div'); el.className='photo-preview'; el.textContent='📷'; p.appendChild(el);
+    const r=new FileReader(); r.onload=e=>{el.style.backgroundImage='url('+e.target.result+')';el.style.backgroundSize='cover';el.textContent='';};
+    r.readAsDataURL(f);
+  });
+}
+async function submitReg(){
+  closeOverlay('registerOverlay');
+  showToast("Profile submitted for review! We'll verify within 24h 🎉",'✓');
+}
+function openProfileEditor(){ closeUserMenu(); showToast('Profile editor — coming soon','ℹ️'); }
+
+// ── Overlay helpers ───────────────────────────────────────────
+function openOverlay(id){ document.getElementById(id).classList.add('show'); document.body.style.overflow='hidden'; }
+function closeOverlay(id){
+  document.getElementById(id).classList.remove('show');
+  if(!document.querySelectorAll('.overlay.show').length) document.body.style.overflow='';
+}
+function showToast(msg,icon='✓'){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  document.getElementById('toastIcon').textContent=icon;
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+
+// ══════════════════════════════════════════════════════════════
+//  ZenFlow iOS — Native App JS Layer
+// ══════════════════════════════════════════════════════════════
+
+// ── Tab Bar ───────────────────────────────────────────────────
+let _activeTab = 'explore';
+function switchTab(tab) {
+  // Haptic-style visual feedback
+  triggerHaptic();
+
+  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('tab-' + tab);
+  if (el) el.classList.add('active');
+  _activeTab = tab;
+
+  switch(tab) {
+    case 'explore':
+      window.scrollTo({top:0, behavior:'smooth'});
+      break;
+    case 'book':
+      // Scroll to talent grid
+      document.getElementById('talentGrid')?.scrollIntoView({behavior:'smooth', block:'start'});
+      break;
+    case 'bookings':
+      openManageModal();
+      setTimeout(() => setActiveTab('explore'), 100);
+      break;
+    case 'ads':
+      if (currentUser) openAdManager();
+      else { openAuthModal('login'); showToast('Sign in to manage ads','ℹ️'); }
+      setTimeout(() => setActiveTab('explore'), 100);
+      break;
+    case 'me':
+      if (currentUser) openDashboard();
+      else openAuthModal('login');
+      setTimeout(() => setActiveTab('explore'), 100);
+      break;
+  }
+}
+function setActiveTab(tab) {
+  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('tab-' + tab);
+  if (el) el.classList.add('active');
+}
+
+// Update "Me" tab icon when logged in
+const _origUpdateHeader = updateHeaderUI;
+function updateHeaderUI() {
+  _origUpdateHeader();
+  if (currentUser) {
+    const init = ((currentUser.first_name||'')[0]+(currentUser.last_name||'')[0]||'').toUpperCase();
+    const tabIcon = document.getElementById('tabMeIcon');
+    if (tabIcon) tabIcon.textContent = init || '👤';
+  }
+}
+
+// ── Tap Ripple Effect ─────────────────────────────────────────
+document.addEventListener('touchstart', function(e) {
+  const target = e.target.closest('.btn-book,.btn-primary,.filter-chip,.talent-card');
+  if (!target) return;
+  const r = document.createElement('span');
+  r.className = 'ripple';
+  const rect = target.getBoundingClientRect();
+  const touch = e.touches[0];
+  r.style.left = (touch.clientX - rect.left) + 'px';
+  r.style.top  = (touch.clientY - rect.top) + 'px';
+  target.style.position = 'relative';
+  target.style.overflow = 'hidden';
+  target.appendChild(r);
+  setTimeout(() => r.remove(), 520);
+}, { passive: true });
+
+// ── Haptic Feedback (iOS Taptic Engine via AudioContext trick) ─
+function triggerHaptic(style = 'light') {
+  // On real iOS devices, CSS :active + scale gives physical-feel feedback
+  // Web Vibration API: works on Android
+  if (navigator.vibrate) {
+    navigator.vibrate(style === 'light' ? 8 : style === 'medium' ? 15 : 25);
+  }
+}
+
+// ── Pull-to-Refresh ───────────────────────────────────────────
+let _ptrStartY = 0, _ptrActive = false;
+document.addEventListener('touchstart', e => {
+  if (window.scrollY === 0) _ptrStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchmove', e => {
+  if (_ptrStartY > 0 && window.scrollY === 0) {
+    const dy = e.touches[0].clientY - _ptrStartY;
+    if (dy > 60 && !_ptrActive) {
+      _ptrActive = true;
+      document.getElementById('ptrIndicator').classList.add('show');
+    }
+  }
+}, { passive: true });
+
+document.addEventListener('touchend', () => {
+  if (_ptrActive) {
+    setTimeout(() => {
+      renderTalents();
+      loadAds();
+      document.getElementById('ptrIndicator').classList.remove('show');
+      _ptrActive = false;
+    }, 800);
+  }
+  _ptrStartY = 0;
+}, { passive: true });
+
+// ── iOS Sheet: swipe down to close ───────────────────────────
+let _sheetStartY = 0;
+document.addEventListener('touchstart', e => {
+  const handle = e.target.closest('.modal');
+  if (handle) _sheetStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+  if (!_sheetStartY) return;
+  const dy = e.changedTouches[0].clientY - _sheetStartY;
+  if (dy > 80) {
+    // Swipe down → close topmost open overlay
+    const open = document.querySelector('.overlay.show');
+    if (open) {
+      open.classList.remove('show');
+      if (!document.querySelectorAll('.overlay.show').length)
+        document.body.style.overflow = '';
+    }
+  }
+  _sheetStartY = 0;
+}, { passive: true });
+
+// ── iOS keyboard: scroll active input into view ───────────────
+document.addEventListener('focusin', e => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) {
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 350); // Wait for keyboard animation
+  }
+});
+
+// ── Prevent double-tap zoom on buttons ───────────────────────
+let _lastTap = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - _lastTap < 300) e.preventDefault();
+  _lastTap = now;
+}, { passive: false });
+
+// ── PWA Install prompt ────────────────────────────────────────
+let _deferredInstall = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredInstall = e;
+});
+
+// ── iOS "Add to Home Screen" nudge (first visit) ─────────────
+function checkInstallNudge() {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = navigator.standalone === true;
+  const nudged = sessionStorage.getItem('zf_install_nudged');
+  if (isIOS && !isStandalone && !nudged) {
+    sessionStorage.setItem('zf_install_nudged', '1');
+    setTimeout(() => {
+      showToast('Tap Share → Add to Home Screen for the full app experience 📱', '💡');
+    }, 3000);
+  }
+}
+
+// ── Extend DOMContentLoaded ───────────────────────────────────
+const _origDOMReady = document.addEventListener;
+document.addEventListener('DOMContentLoaded', () => {
+  checkInstallNudge();
+  setActiveTab('explore');
+});
+
+</script>
+
+<!-- ══ iOS BOTTOM TAB BAR ════════════════════════════════════ -->
+<div class="ios-tab-bar" id="iosTabBar">
+  <div class="tab-item active" id="tab-explore" onclick="switchTab('explore')">
+    <div class="tab-icon-wrap">
+      <span class="tab-icon">🔍</span>
+    </div>
+    <span class="tab-label" data-en>Explore</span>
+  </div>
+  <div class="tab-item" id="tab-book" onclick="switchTab('book')">
+    <div class="tab-icon-wrap">
+      <span class="tab-icon">📅</span>
+    </div>
+    <span class="tab-label" data-en>Book</span>
+  </div>
+  <div class="tab-item" id="tab-bookings" onclick="switchTab('bookings')">
+    <div class="tab-icon-wrap">
+      <span class="tab-icon">🗂</span>
+    </div>
+    <span class="tab-label" data-en>My Bookings</span>
+  </div>
+  <div class="tab-item" id="tab-ads" onclick="switchTab('ads')">
+    <div class="tab-icon-wrap">
+      <span class="tab-icon">📢</span>
+    </div>
+    <span class="tab-label" data-en>Ads</span>
+  </div>
+  <div class="tab-item" id="tab-me" onclick="switchTab('me')">
+    <div class="tab-icon-wrap">
+      <span class="tab-icon" id="tabMeIcon">👤</span>
+    </div>
+    <span class="tab-label" data-en>Me</span>
+  </div>
+</div>
+
+<!-- Pull-to-refresh indicator -->
+<div class="ptr-indicator" id="ptrIndicator">
+  <span style="animation:spin 1s linear infinite;display:inline-block">⟳</span>
+  Refreshing…
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+</body>
+</html>

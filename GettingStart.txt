@@ -1,0 +1,18 @@
+# 1. Install
+pip install -r requirements.txt
+
+# 2. Create PostgreSQL DB
+sudo -u postgres psql -c "CREATE USER zenflow WITH PASSWORD 'strong_pass';"
+sudo -u postgres psql -c "CREATE DATABASE zenflow OWNER zenflow;"
+psql -U zenflow -d zenflow -f 001_postgres_schema.sql
+
+# 3. Fill .env
+DATABASE_URL=postgres://zenflow:strong_pass@localhost:5432/zenflow
+REDIS_URL=redis://localhost:6379/0
+ALLOWED_ORIGINS=https://zenflow.sg
+
+# 4. Run
+gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+
+# 5. Nginx + TLS
+sudo certbot --nginx -d zenflow.sg -d www.zenflow.sg

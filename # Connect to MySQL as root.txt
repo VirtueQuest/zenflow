@@ -1,0 +1,52 @@
+# Connect to MySQL as root
+mysql -u root -p
+
+# Run these commands (replace 'strong_pass' with your password)
+CREATE DATABASE zenflow CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'zenflow'@'localhost' IDENTIFIED BY 'strong_pass';
+GRANT ALL PRIVILEGES ON zenflow.* TO 'zenflow'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+mysql> CREATE USER 'zenflow'@'localhost' IDENTIFIED BY 'Qwerty12$12';
+ERROR 1396 (HY000): Operation CREATE USER failed for 'zenflow'@'localhost'
+mysql> CREATE USER 'admin'@'localhost' IDENTIFIED BY 'Qwerty12@12';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> GRANT ALL PRIVILEGES ON zenflow.* TO 'admin"@'localhost';
+    '> FLUSH PRIVILEGES;
+    '> EXIT;
+
+🧪 Test Registration
+Step 1: Register a Customer
+bash
+curl -X POST http://localhost:8000/auth/register -H "Content-Type: application/json" -d "{\"email\":\"customer@test.com\",\"first_name\":\"Test\",\"last_name\":\"Customer\",\"password\":\"TestPwd123!\",\"account_type\":\"customer\"}"
+
+Step 2: Register a Professional
+bash
+curl -X POST http://localhost:8000/auth/register -H "Content-Type: application/json" -d "{\"email\":\"therapist@test.com\",\"first_name\":\"Sarah\",\"last_name\":\"Wellness\",\"password\":\"Therapy2026!\",\"account_type\":\"professional\"}"Step 3: Try to Register with Existing Email
+bash
+curl -X POST http://localhost:8000/auth/register \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"customer@test.com\",\"first_name\":\"Another\",\"last_name\":\"User\",\"password\":\"TestPwd123!\",\"account_type\":\"customer\"}"
+Expected: Error message about duplicate email.
+
+Option A: Create a New Virtual Environment in Current Project
+bash
+# Navigate to your current project
+cd "G:\Disk 1\ZenFlow_mySQL"
+
+# Delete old venv (if it exists)
+rmdir /s venv
+
+# Create new virtual environment
+python -m venv venv
+
+# Activate it
+venv\Scripts\activate
+
+# Install passlib (for password hashing)
+pip install passlib[bcrypt]
+
+# Install dependencies
+pip install fastapi uvicorn[standard] aiomysql pymysql python-dotenv redis apscheduler
