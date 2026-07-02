@@ -17,12 +17,17 @@ jobs:
       with:
         python-version: '3.10'
 
+    # Step 1: Create the dummy .env file so your code is happy
+    - name: Copy .env.example to .env
+      run: |
+        copy .env.example .env
+
     - name: Execute batch file
       run: |
         .\setup_venzv.bat
 
     - name: Test Run Uvicorn Server
-      # We inject the missing environment variable right here
+      # Step 2: Pass the missing secret value into the test environment
       env:
         ZF_SECRET: "github_actions_dummy_test_key_12345"
       run: |
