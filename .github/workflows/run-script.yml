@@ -17,20 +17,21 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Step 1: Create the dummy .env file so your code is happy
+    # Fixed: Uses the absolute workspace path to find the file perfectly
     - name: Copy .env.example to .env
       run: |
-        copy .env.example .env
+        Copy-Item "${{ github.workspace }}\.env.example" "${{ github.workspace }}\.env"
 
     - name: Execute batch file
       run: |
+        cd "${{ github.workspace }}"
         .\setup_venzv.bat
 
     - name: Test Run Uvicorn Server
-      # Step 2: Pass the missing secret value into the test environment
       env:
         ZF_SECRET: "github_actions_dummy_test_key_12345"
       run: |
+        cd "${{ github.workspace }}"
         $job = Start-Job -ScriptBlock { uvicorn main:app --port 8000 }
         Start-Sleep -Seconds 10
         Stop-Job $job
