@@ -19,7 +19,7 @@ jobs:
 
     - name: Execute batch file
       run: |
-        setup_venzv.bat
+        .\setup_venzv.bat
 
     - name: Test Run Uvicorn Server
       run: |
